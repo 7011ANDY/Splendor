@@ -4,5 +4,8 @@ By using Splendor or any products by Apoth you agree to the EULA and Terms of se
 
 Created as a School Project for GHS Software Engineering 2025 by Andy L, all rights reserved.
 
-<img width="500" height="113" alt="Splendor" src="https://github.com/user-attachments/assets/446b00f4-a374-4ec0-b571-8976c1967333" />
+
+<img width="500" height="113" alt="Splendor" src="https://github.com/user-attachments/assets/7b5a4fcf-d574-4aec-a57e-f8a39e7783dc" />
+
+
 ©
