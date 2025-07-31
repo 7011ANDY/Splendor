@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore | Splendor</title>
+    <link rel="icon" type="image/x-icon" href="Assets/SPLENDOR_ICON.ico">
+    <link rel="stylesheet" href="style.css">
+    <style>
+      body { 
+        background: #18181b !important; 
+        color: #ececec !important; 
+        overflow-y: auto !important;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255,255,255,0.2) transparent;
+      }
+      
+      body::-webkit-scrollbar {
+        width: 8px;
+        background: transparent;
+      }
+      
+      body::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      
+      body::-webkit-scrollbar-thumb {
+        background: rgba(255,255,255,0.15);
+        border-radius: 4px;
+        transition: background 0.2s ease;
+      }
+      
+      body::-webkit-scrollbar-thumb:hover {
+        background: rgba(255,255,255,0.25);
+      }
+      
+      nav { 
+        background: #18191a !important; 
+        color: #ececec !important; 
+        border-bottom: 1px solid #23232a; 
+        box-shadow: none !important; 
+      }
+      
+      .main-content { 
+        background: #18181b !important; 
+        border-radius: 0 !important; 
+        box-shadow: none !important; 
+        min-height: calc(100vh - 48px); 
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255,255,255,0.2) transparent;
+      }
+      
+      .main-content::-webkit-scrollbar {
+        width: 8px;
+        background: transparent;
+      }
+      
+      .main-content::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      
+      .main-content::-webkit-scrollbar-thumb {
+        background: rgba(255,255,255,0.15);
+        border-radius: 4px;
+        transition: background 0.2s ease;
+      }
+      
+      .main-content::-webkit-scrollbar-thumb:hover {
+        background: rgba(255,255,255,0.25);
+      }
+      
+      .explore-title { 
+        font-size: 2.7rem; 
+        font-weight: 700; 
+        margin-bottom: 0.5rem; 
+        margin-top: 2.5rem; 
+        letter-spacing: -1px; 
+      }
+      
+      .explore-desc { 
+        font-size: 1.15rem; 
+        color: #bfc3c9; 
+        margin-bottom: 2.5rem; 
+      }
+      
+      .explore-grid { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); 
+        gap: 2rem; 
+        max-width: 1200px; 
+        margin: 0 auto; 
+        margin-bottom: 3rem; 
+        padding: 0 1rem; 
+      }
+      
+      .explore-card { 
+        background: #23232a; 
+        border-radius: 0.7rem; 
+        box-shadow: none; 
+        border: 1px solid #23232a; 
+        padding: 2.2rem 2rem 1.5rem 2rem; 
+        display: flex; 
+        flex-direction: column; 
+        min-height: 270px; 
+        transition: border 0.18s, background 0.18s; 
+      }
+      
+      .explore-card:hover { 
+        border: 1.5px solid #ececec; 
+      }
+      
+      .explore-icon { 
+        width: 38px; 
+        height: 38px; 
+        margin-bottom: 1.2rem; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        background: #18181b; 
+        border-radius: 0.4rem; 
+      }
+      
+      .explore-card h2 { 
+        font-size: 1.35rem; 
+        font-weight: 700; 
+        margin: 0 0 0.5rem 0; 
+        color: #fff; 
+      }
+      
+      .explore-card p { 
+        color: #bfc3c9; 
+        font-size: 1.04rem; 
+        margin-bottom: 1.7rem; 
+        line-height: 1.5; 
+      }
+      
+      .explore-link { 
+        color: #1DE9B6; 
+        font-weight: 600; 
+        text-decoration: none; 
+        font-size: 1.08rem; 
+        margin-top: auto; 
+        display: inline-flex; 
+        align-items: center; 
+        gap: 0.3em; 
+        transition: color 0.18s; 
+      }
+      
+      .explore-link:hover { 
+        color: #00bfae; 
+        text-decoration: underline; 
+      }
+      
+      @media (max-width: 900px) { 
+        .explore-grid { 
+          grid-template-columns: 1fr; 
+          padding: 0 1rem; 
+        } 
+        .main-content { 
+          padding: 0 0.5rem; 
+        } 
+        .explore-title { 
+          font-size: 2rem; 
+          margin-top: 2rem; 
+        }
+        .explore-desc { 
+          font-size: 1rem; 
+        }
+      }
+      
+      .barcode-lines { 
+        width: 40px; 
+        height: 22px; 
+        display: flex; 
+        align-items: center; 
+        gap: 1px; 
+      }
+      
+      .barcode-line { 
+        height: 100%; 
+        background-color: #444 !important; 
+        flex-grow: 1; 
+        transition: height 0.5s cubic-bezier(.4,0,.2,1); 
+      }
+      
+      .barcode-line.animated { 
+        height: 45%; 
+      }
+      
+      .barcode-line:nth-last-child(2) { 
+        background-color: #222 !important; 
+      }
+      
+      .barcode-line:last-child { 
+        background-color: #1DE9B6 !important; 
+      }
+      
+      .barcode-text { 
+        color: #e0f7fa !important; 
+        font-family: monospace; 
+        font-size: 12px; 
+        letter-spacing: 5px; 
+        user-select: none; 
+      }
+      
+      .nav-animated-logo { 
+        min-width: 90px; 
+        min-height: 40px; 
+      }
+      
+      .strikethrough-grow { 
+        position: relative; 
+        display: inline-block; 
+        text-decoration: none; 
+        color: inherit; 
+        overflow: visible; 
+      }
+      
+      .strikethrough-grow::before { 
+        content: ''; 
+        position: absolute; 
+        top: 50%; 
+        left: 0; 
+        width: 100%; 
+        height: 2px; 
+        background-color: #fff; 
+        transform: scaleX(0); 
+        transform-origin: 100% 50%; 
+        transition: transform 0.3s cubic-bezier(0.4, 1, 0.8, 1); 
+      }
+      
+      .strikethrough-grow:hover::before { 
+        transform: scaleX(1); 
+        transform-origin: 0% 50%; 
+        background-color: #fff; 
+      }
+      
+      .strikethrough-grow div { 
+        display: inline-block; 
+        transition: transform 0.3s cubic-bezier(0.4, 1, 0.8, 1); 
+        color: #fff !important; 
+      }
+      
+      .strikethrough-grow:hover div { 
+        color: #fff !important; 
+        transform: scale(1.1); 
+      }
+    </style>
+  </head>
+  <body class="figma-theme dark-mode fade-in">
+    <nav>
+      <div class="nav-animated-logo" style="display:flex;align-items:center;gap:10px;padding-left:20px;height:40px;justify-content:center;">
+        <div class="barcode" style="height:32px;display:flex;align-items:center;justify-content:center;margin-top:4px;margin-bottom:10px;">
+          <div class="barcode-lines" style="height:22px;width:40px;display:flex;align-items:center;gap:1px;">
+            <div class="barcode-line"></div>
+            <div class="barcode-line"></div>
+            <div class="barcode-line"></div>
+            <div class="barcode-line"></div>
+            <div class="barcode-line"></div>
+            <div class="barcode-line"></div>
+            <div class="barcode-line"></div>
+          </div>
+          <div class="barcode-text" style="font-size:11px;margin-left:7px;">SPLENDOR</div>
+        </div>
+      </div>
+      <ul>
+        <li><a href="index.html" class="strikethrough-grow"><div>Projects</div></a></li>
+        <li><a href="search.html" class="strikethrough-grow"><div>Search</div></a></li>
+        <li><a href="explore.html" class="strikethrough-grow"><div>Explore</div></a></li>
+        <li><a href="messages.html" class="strikethrough-grow"><div>Messages</div></a></li>
+        <li><a href="muse.html" class="strikethrough-grow" id="aiTab"><div>Muse</div></a></li>
+        <li><a href="#" class="strikethrough-grow" id="profileLink"><div>Profile</div></a></li>
+        <li id="logoutButton" style="display: none;"><a href="#" class="strikethrough-grow"><div>Logout</div></a></li>
+      </ul>
+    </nav>
+    <main class="main-content">
+      <div style="max-width:1200px;margin:0 auto;padding:0 1.5rem;">
+        <div class="explore-title">Explore</div>
+        <div class="explore-desc">Discover public projects, learn best practices, and connect with the community.</div>
+        <div class="explore-grid">
+          <div class="explore-card">
+            <div class="explore-icon"><svg width="28" height="28" fill="none" stroke="#ececec" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg></div>
+            <h2>Browse</h2>
+            <p>Explore public projects created by the community. Find inspiration and discover innovative solutions.</p>
+            <a class="explore-link" href="search.html"><span>Browse Projects</span> <svg width="18" height="18" fill="none" stroke="#1DE9B6" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          </div>
+          <div class="explore-card">
+            <div class="explore-icon"><svg width="28" height="28" fill="none" stroke="#ececec" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+            <h2>Attributions</h2>
+            <p>View credits and acknowledgments for third-party resources, libraries, and assets used in this project.</p>
+            <a class="explore-link" href="attributions.html"><span>View Credits</span> <svg width="18" height="18" fill="none" stroke="#1DE9B6" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          </div>
+          <div class="explore-card">
+            <div class="explore-icon"><svg width="28" height="28" fill="none" stroke="#ececec" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+            <h2>Messages</h2>
+            <p>Designed for co-workers, simply share each other's user IDs and add them to begin conversations.</p>
+            <a class="explore-link" href="messages.html"><span>Start Chatting</span> <svg width="18" height="18" fill="none" stroke="#1DE9B6" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          </div>
+          <div class="explore-card">
+            <div class="explore-icon"><svg width="28" height="28" fill="none" stroke="#ececec" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/></svg></div>
+            <h2>AI Tools</h2>
+            <p>Access AI-powered features to enhance your creative process and development workflow.</p>
+            <a class="explore-link" href="muse.html"><span>Configure Muse AI</span> <svg width="18" height="18" fill="none" stroke="#1DE9B6" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          </div>
+          <div class="explore-card">
+            <div class="explore-icon"><svg width="28" height="28" fill="none" stroke="#ececec" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h10v10H7z"/></svg></div>
+            <h2>Open Source Resources</h2>
+            <p>Discover JavaScript libraries, frameworks, and tools with helpful tips and best practices.</p>
+            <a class="explore-link" href="open-source-resources.html"><span>Browse Resources</span> <svg width="18" height="18" fill="none" stroke="#1DE9B6" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          </div>
+          <div class="explore-card">
+            <div class="explore-icon"><svg width="28" height="28" fill="none" stroke="#ececec" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+            <h2>Updates</h2>
+            <p>Stay informed with the latest features, improvements, and announcements from APOTH.</p>
+            <a class="explore-link" href="updates.html"><span>View Timeline</span> <svg width="18" height="18" fill="none" stroke="#1DE9B6" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="auth.js"></script>
+    <script>
+      (function() {
+        const barcodeLines = document.querySelectorAll('.barcode-line');
+        const barCount = barcodeLines.length;
+        const waveDuration = 700;
+        const barDelay = 80;
+
+        function animateWave() {
+          barcodeLines.forEach((bar, i) => {
+            setTimeout(() => {
+              bar.classList.add('animated');
+              setTimeout(() => {
+                bar.classList.remove('animated');
+              }, waveDuration / 2);
+            }, i * barDelay);
+          });
+        }
+
+        setInterval(animateWave, waveDuration + barCount * barDelay / 2);
+        animateWave();
+      })();
+      
+      document.addEventListener('DOMContentLoaded', function() {
+        const profileLink = document.getElementById('profileLink');
+        profileLink.addEventListener('click', async function(e) {
+          e.preventDefault();
+          try {
+            const user = await window.account.get();
+            window.location.href = `profile.html?id=${user.$id}`;
+          } catch (error) {
+            console.error('Error getting user:', error);
+            window.location.href = 'Login.html';
+          }
+        });
+      });
+    </script>
+  </body>
+</html> 

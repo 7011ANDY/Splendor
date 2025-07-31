@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attributions | Splendor</title>
+    <link rel="icon" type="image/x-icon" href="Assets/SPLENDOR_ICON.ico">
+    <link rel="stylesheet" href="style.css">
+    <style>
+      body { 
+        background: #18181b !important; 
+        color: #ececec !important; 
+        overflow-y: auto !important;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255,255,255,0.2) transparent;
+      }
+      
+      body::-webkit-scrollbar {
+        width: 8px;
+        background: transparent;
+      }
+      
+      body::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      
+      body::-webkit-scrollbar-thumb {
+        background: rgba(255,255,255,0.15);
+        border-radius: 4px;
+        transition: background 0.2s ease;
+      }
+      
+      body::-webkit-scrollbar-thumb:hover {
+        background: rgba(255,255,255,0.25);
+      }
+      
+      nav { 
+        background: #18191a !important; 
+        color: #ececec !important; 
+        border-bottom: 1px solid #23232a; 
+        box-shadow: none !important; 
+      }
+      
+      .main-content { 
+        background: #18181b !important; 
+        border-radius: 0 !important; 
+        box-shadow: none !important; 
+        min-height: calc(100vh - 48px); 
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255,255,255,0.2) transparent;
+      }
+      
+      .main-content::-webkit-scrollbar {
+        width: 8px;
+        background: transparent;
+      }
+      
+      .main-content::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      
+      .main-content::-webkit-scrollbar-thumb {
+        background: rgba(255,255,255,0.15);
+        border-radius: 4px;
+        transition: background 0.2s ease;
+      }
+      
+      .main-content::-webkit-scrollbar-thumb:hover {
+        background: rgba(255,255,255,0.25);
+      }
+      
+      .attributions-title { 
+        font-size: 2.7rem; 
+        font-weight: 700; 
+        margin-bottom: 0.5rem; 
+        margin-top: 2.5rem; 
+        letter-spacing: -1px; 
+      }
+      
+      .attributions-desc { 
+        font-size: 1.15rem; 
+        color: #bfc3c9; 
+        margin-bottom: 2.5rem; 
+      }
+      
+      .attributions-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+      }
+      
+      .attribution-section {
+        background: #23232a;
+        border-radius: 0.7rem;
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+        border: 1px solid #23232a;
+        transition: border 0.18s;
+      }
+      
+      .attribution-section:hover {
+        border: 1.5px solid #ececec;
+      }
+      
+      .attribution-section h3 {
+        font-size: 1.35rem;
+        font-weight: 700;
+        margin: 0 0 1rem 0;
+        color: #fff;
+      }
+      
+      .attribution-section p {
+        color: #bfc3c9;
+        font-size: 1.04rem;
+        line-height: 1.6;
+        margin-bottom: 0.5rem;
+      }
+      
+      .attribution-section a {
+        color: #1DE9B6;
+        text-decoration: none;
+        transition: color 0.18s;
+      }
+      
+      .attribution-section a:hover {
+        color: #00bfae;
+        text-decoration: underline;
+      }
+      
+      .license-badge {
+        display: inline-block;
+        background: #1DE9B6;
+        color: #18181b;
+        padding: 0.25rem 0.75rem;
+        border-radius: 1rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-left: 0.5rem;
+      }
+      
+      @media (max-width: 900px) { 
+        .attributions-container { 
+          padding: 0 1rem; 
+        } 
+        .main-content { 
+          padding: 0 0.5rem; 
+        } 
+        .attributions-title { 
+          font-size: 2rem; 
+          margin-top: 2rem; 
+        }
+        .attributions-desc { 
+          font-size: 1rem; 
+        }
+      }
+      
+      .barcode-lines { 
+        width: 40px; 
+        height: 22px; 
+        display: flex; 
+        align-items: center; 
+        gap: 1px; 
+      }
+      
+      .barcode-line { 
+        height: 100%; 
+        background-color: #444 !important; 
+        flex-grow: 1; 
+        transition: height 0.5s cubic-bezier(.4,0,.2,1); 
+      }
+      
+      .barcode-line.animated { 
+        height: 45%; 
+      }
+      
+      .barcode-line:nth-last-child(2) { 
+        background-color: #222 !important; 
+      }
+      
+      .barcode-line:last-child { 
+        background-color: #1DE9B6 !important; 
+      }
+      
+      .barcode-text { 
+        color: #e0f7fa !important; 
+        font-family: monospace; 
+        font-size: 12px; 
+        letter-spacing: 5px; 
+        user-select: none; 
+      }
+      
+      .nav-animated-logo { 
+        min-width: 90px; 
+        min-height: 40px; 
+      }
+      
+      .strikethrough-grow { 
+        position: relative; 
+        display: inline-block; 
+        text-decoration: none; 
+        color: inherit; 
+        overflow: visible; 
+      }
+      
+      .strikethrough-grow::before { 
+        content: ''; 
+        position: absolute; 
+        top: 50%; 
+        left: 0; 
+        width: 100%; 
+        height: 2px; 
+        background-color: #fff; 
+        transform: scaleX(0); 
+        transform-origin: 100% 50%; 
+        transition: transform 0.3s cubic-bezier(0.4, 1, 0.8, 1); 
+      }
+      
+      .strikethrough-grow:hover::before { 
+        transform: scaleX(1); 
+        transform-origin: 0% 50%; 
+        background-color: #fff; 
+      }
+      
+      .strikethrough-grow div { 
+        display: inline-block; 
+        transition: transform 0.3s cubic-bezier(0.4, 1, 0.8, 1); 
+        color: #fff !important; 
+      }
+      
+      .strikethrough-grow:hover div { 
+        color: #fff !important; 
+        transform: scale(1.1); 
+      }
+    </style>
+  </head>
+  <body class="figma-theme dark-mode fade-in">
+    <nav>
+      <div class="nav-animated-logo" style="display:flex;align-items:center;gap:10px;padding-left:20px;height:40px;justify-content:center;">
+        <div class="barcode" style="height:32px;display:flex;align-items:center;justify-content:center;margin-top:4px;margin-bottom:10px;">
+          <div class="barcode-lines" style="height:22px;width:40px;display:flex;align-items:center;gap:1px;">
+            <div class="barcode-line"></div>
+            <div class="barcode-line"></div>
+            <div class="barcode-line"></div>
+            <div class="barcode-line"></div>
+            <div class="barcode-line"></div>
+            <div class="barcode-line"></div>
+            <div class="barcode-line"></div>
+          </div>
+          <div class="barcode-text" style="font-size:11px;margin-left:7px;">SPLENDOR</div>
+        </div>
+      </div>
+      <ul>
+        <li><a href="index.html" class="strikethrough-grow"><div>Projects</div></a></li>
+        <li><a href="search.html" class="strikethrough-grow"><div>Search</div></a></li>
+        <li><a href="explore.html" class="strikethrough-grow"><div>Explore</div></a></li>
+        <li><a href="messages.html" class="strikethrough-grow"><div>Messages</div></a></li>
+        <li><a href="muse.html" class="strikethrough-grow" id="aiTab"><div>Muse</div></a></li>
+        <li><a href="#" class="strikethrough-grow" id="profileLink"><div>Profile</div></a></li>
+        <li id="logoutButton" style="display: none;"><a href="#" class="strikethrough-grow"><div>Logout</div></a></li>
+      </ul>
+    </nav>
+    <main class="main-content">
+      <div class="attributions-container">
+        <div class="attributions-title">Attributions</div>
+        <div class="attributions-desc">Credits and acknowledgments for third-party resources used in this project.</div>
+        
+        <div class="attribution-section">
+          <h3>Appwrite<span class="license-badge">MIT</span></h3>
+          <p>Backend-as-a-Service platform providing authentication, database, and storage services.</p>
+          <p><a href="https://appwrite.io" target="_blank">https://appwrite.io</a></p>
+        </div>
+        
+        <div class="attribution-section">
+          <h3>DiceBear Avatars<span class="license-badge">MIT</span></h3>
+          <p>Avatar generation service used for user profile pictures and placeholders.</p>
+          <p><a href="https://www.dicebear.com" target="_blank">https://www.dicebear.com</a></p>
+        </div>
+        
+        <div class="attribution-section">
+          <h3>Google Fonts<span class="license-badge">OFL</span></h3>
+          <p>Typography fonts including Inter, Segoe UI, Bodoni Moda, and Cormorant Garamond.</p>
+          <p><a href="https://fonts.google.com" target="_blank">https://fonts.google.com</a></p>
+        </div>
+        
+        <div class="attribution-section">
+          <h3>Unsplash<span class="license-badge">Unsplash (free with attribution)</span></h3>
+          <p>High-quality stock photography used for background images and visual assets.</p>
+          <p><strong>Specifically:</strong> andrew-kliatskyi, pawel-czerwinski</p>
+          <p><a href="https://unsplash.com" target="_blank">https://unsplash.com</a></p>
+        </div>
+        
+        <div class="attribution-section">
+          <h3>Feather Icons<span class="license-badge">MIT</span></h3>
+          <p>Simple, beautiful open source icons used throughout the interface.</p>
+          <p><a href="https://feathericons.com" target="_blank">https://feathericons.com</a></p>
+        </div>
+        
+        <div class="attribution-section">
+          <h3>Inter Font Family<span class="license-badge">OFL</span></h3>
+          <p>Primary typeface designed for computer screens and user interfaces.</p>
+          <p><a href="https://rsms.me/inter/" target="_blank">https://rsms.me/inter/</a></p>
+        </div>
+        
+        <div class="attribution-section">
+          <h3>Futura Std Light<span class="license-badge">Commercial</span></h3>
+          <p>Typography font used for specific design elements and branding.</p>
+          <p>Licensed font from Adobe Fonts</p>
+        </div>
+        
+        <div class="attribution-section">
+          <h3>Oblata Display Regular<span class="license-badge">OFL</span></h3>
+          <p>Display typeface used for headings and prominent text elements.</p>
+          <p><a href="https://fonts.google.com/specimen/Oblata" target="_blank">https://fonts.google.com/specimen/Oblata</a></p>
+        </div>
+        
+        <div class="attribution-section">
+          <h3>Google SVGs<span class="license-badge">Apache 2.0</span></h3>
+          <p>Vector icons and graphics used throughout the interface for enhanced user experience.</p>
+          <p><a href="https://fonts.google.com/icons" target="_blank">https://fonts.google.com/icons</a></p>
+        </div>
+        
+        <div class="attribution-section">
+          <h3>Ui-Verse<span class="license-badge">Inspiration</span></h3>
+          <p>Design inspiration and creative direction for the overall aesthetic and user experience. Especially Neomorphic and Glassmorphic design.</p>
+          <p><a href="https://uiverse.io" target="_blank">https://uiverse.io</a></p>
+        </div>
+      </div>
+    </main>
+    <script>
+      (function() {
+        const barcodeLines = document.querySelectorAll('.barcode-line');
+        const barCount = barcodeLines.length;
+        const waveDuration = 700;
+        const barDelay = 80;
+
+        function animateWave() {
+          barcodeLines.forEach((bar, i) => {
+            setTimeout(() => {
+              bar.classList.add('animated');
+              setTimeout(() => {
+                bar.classList.remove('animated');
+              }, waveDuration / 2);
+            }, i * barDelay);
+          });
+        }
+
+        setInterval(animateWave, waveDuration + barCount * barDelay / 2);
+        animateWave();
+      })();
+    </script>
+  </body>
+</html> 

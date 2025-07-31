@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Denied - SPLENDOR</title>
+    <link rel="icon" type="image/x-icon" href="Assets/SPLENDOR_ICON.ico">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            min-height: 100vh;
+            min-width: 100vw;
+            display: flex;
+            flex-direction: row;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .error-bg {
+            flex: 1 1 50%;
+            background: url('Assets/Error_BG.jpg') center center/cover no-repeat;
+            min-width: 0;
+            min-height: 100vh;
+        }
+        .error-content {
+            flex: 1 1 50%;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 60px 40px 60px 60px;
+            min-width: 320px;
+            box-sizing: border-box;
+        }
+        .error-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 24px;
+        }
+        .error-desc {
+            font-size: 1.1rem;
+            color: #444;
+            margin-bottom: 28px;
+            line-height: 1.6;
+        }
+        .error-list {
+            font-size: 1rem;
+            color: #333;
+            margin-left: 18px;
+            margin-bottom: 32px;
+        }
+        .error-list li {
+            margin-bottom: 12px;
+        }
+        .back-btn {
+            padding: 12px 28px;
+            background: #23272e;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.08rem;
+            font-weight: 600;
+            margin-top: 10px;
+            box-shadow: 2px 2px 8px #b8b9be33, -2px -2px 8px #fff1;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+        }
+        .back-btn:hover, .back-btn:focus {
+            background: #a2e534;
+            color: #111;
+            box-shadow: 0 4px 16px #b8b9be33;
+            outline: none;
+        }
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+                background: linear-gradient(135deg, #f6ffe3 0%, #ffeecb 60%, #ffe3e3 100%) !important;
+            }
+            .error-bg {
+                display: none !important;
+            }
+            .error-content {
+                flex: none;
+                width: 100vw;
+                min-width: 0;
+                min-height: 100vh;
+                background: rgba(246,255,227,0.97) !important;
+                border-radius: 18px;
+                box-shadow: 0 4px 24px 0 #e0e5ec33;
+                padding: 40px 20px;
+                align-items: center;
+                justify-content: flex-start;
+                text-align: center;
+            }
+            .error-title {
+                font-size: 1.4rem;
+            }
+            .error-desc {
+                font-size: 1rem;
+            }
+            .error-list {
+                font-size: 0.98rem;
+                margin-left: 0;
+                padding: 0 18px 0 18px;
+                box-sizing: border-box;
+                text-align: left;
+            }
+            .error-list li {
+                margin-bottom: 16px;
+                line-height: 1.6;
+                font-size: 1.05em;
+            }
+            .back-btn {
+                width: 100%;
+                max-width: 340px;
+                font-size: 1.08rem;
+                margin-top: 18px;
+                padding: 16px 0;
+            }
+            .bottom-content {
+                position: static;
+                margin: 30px auto 0 auto;
+                justify-content: center;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            .logo {
+                width: 80px;
+            }
+            .barcode-lines {
+                width: 70px;
+                height: 18px;
+            }
+        }
+        .bottom-content {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            align-items: flex-end;
+            gap: 20px;
+            z-index: 10;
+        }
+        .logo {
+            width: 120px;
+            height: auto;
+            transform: translateY(-7px);
+        }
+        .barcode {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 5px;
+        }
+        .barcode-lines {
+            width: 120px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+        .barcode-line {
+            height: 100%;
+            background-color: #222;
+            flex-grow: 1;
+            transition: height 0.7s ease;
+            animation: barcodePulse .5s infinite;
+        }
+        .barcode-line:nth-last-child(2) {
+            background-color: #145c2c; /* dark green */
+        }
+        .barcode-line:last-child {
+            background-color: #baff39; /* lime */
+        }
+        .barcode-line:nth-child(2n) {
+            animation-delay: 0.2s;
+        }
+        .barcode-line:nth-child(3n) {
+            animation-delay: 0.4s;
+        }
+        .barcode-line:nth-child(4n) {
+            animation-delay: 0.6s;
+        }
+        .barcode-line:nth-child(5n) {
+            animation-delay: 0.8s;
+        }
+        @keyframes barcodePulse {
+            0% { height: 100%; }
+            50% { height: 85%; }
+            100% { height: 100%; }
+        }
+        .barcode-text {
+            color: #145c2c;
+            font-family: monospace;
+            font-size: 12px;
+            letter-spacing: 5px;
+        }
+        @media screen and (max-width: 900px) {
+            .bottom-content {
+                position: static;
+                margin: 30px auto 0 auto;
+                justify-content: center;
+            }
+            .logo {
+                width: 90px;
+            }
+            .barcode-lines {
+                width: 90px;
+                height: 24px;
+            }
+        }
+        .error-list a.login-link {
+            color: #111;
+            text-decoration: underline;
+            font-weight: 600;
+            transition: color 0.18s;
+        }
+        .error-list a.login-link:hover, .error-list a.login-link:focus {
+            color: #145c2c;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-bg"></div>
+    <div class="error-content">
+        <div class="error-title">You do not have permission to view this project.</div>
+        <div class="error-desc">
+            If you believe you should have permissions to view/edit the project, please check that:
+        </div>
+        <ul class="error-list">
+            <li>You are <a href="Login.html" class="login-link">logged into the appropriate account</a>.</li>
+            <li>You have adblocker/trackingblocker extensions turned <b>OFF</b> for <b>splendor.apoth.dev.</b></li>
+            <li>You are not in incognito mode.</li>
+            <li>You have an active internet connection.</li>
+            <li>The URL of the project you have tried to access was correct.</li>
+        </ul>
+        <button class="back-btn" onclick="window.location.href='index.html'">Back to Dashboard</button>
+    </div>
+    <div class="bottom-content">
+        <img src="Assets/Logo3.png" alt="Splendor Logo" class="logo">
+        <div class="barcode">
+            <div class="barcode-lines">
+                <div class="barcode-line"></div>
+                <div class="barcode-line"></div>
+                <div class="barcode-line"></div>
+                <div class="barcode-line"></div>
+                <div class="barcode-line"></div>
+                <div class="barcode-line"></div>
+                <div class="barcode-line"></div>
+                <div class="barcode-line"></div>
+                <div class="barcode-line"></div>
+                <div class="barcode-line"></div>
+                <div class="barcode-line"></div>
+                <div class="barcode-line"></div>
+                <div class="barcode-line"></div>
+                <div class="barcode-line"></div>
+            </div>
+            <div class="barcode-text">SPLENDOR</div>
+        </div>
+    </div>
+</body>
+</html> 

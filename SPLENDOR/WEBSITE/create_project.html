@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Project - Splendor</title>
+    <link rel="icon" type="image/x-icon" href="Assets/SPLENDOR_ICON.ico">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/appwrite@17.0.0"></script>
+    <meta charset="utf-8">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="auth.js"></script>
     <script>
-        // Initialize Appwrite client
         const client = new Appwrite.Client()
             .setEndpoint('https://fra.cloud.appwrite.io/v1')
             .setProject('680364d1000477ec420b');
@@ -139,7 +143,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding-bottom: 120px; /* Prevent overlap with logo/barcode */
+            padding-bottom: 120px;
         }
 
         .bottom-content {
@@ -526,11 +530,10 @@
             100% { transform: translateX(0); }
         }
 
-        /* Particle effect styles */
         .particle {
             position: fixed;
             pointer-events: none;
-            background: rgba(188, 44, 10, 0.8); /* Base crimson color */
+            background: rgba(188, 44, 10, 0.8);
             border-radius: 50%;
             width: 4px;
             height: 4px;
@@ -619,13 +622,12 @@
             max-width: 600px;
         }
 
-        /* Glassmorphism horizontal scrollbar for tag list */
         .tag-list {
             display: flex;
             flex-wrap: wrap;
             gap: 0.5em;
             max-width: 90%;
-            max-height: 6.2em; /* ~3 rows */
+            max-height: 6.2em;
             overflow-y: auto;
             overflow-x: hidden;
             align-items: flex-start;
@@ -675,13 +677,11 @@
             box-shadow: 0 0 8px 2px #fff4, 0 0 0 4px rgba(176,44,10,0.10);
         }
 
-        /* Remove animated outline for selected tags */
         .tag-pill.selected {
             animation: none;
             border-image: none;
         }
 
-        /* Shrink tag size if many tags */
         .tag-list.shrink .tag-pill {
             font-size: 0.85em;
             padding: 0.25em 0.7em;
@@ -711,7 +711,7 @@
             flex-wrap: wrap;
             gap: 0.5em;
             max-width: 90%;
-            max-height: 6.2em; /* ~3 rows */
+            max-height: 6.2em;
             overflow-y: auto;
             overflow-x: hidden;
             align-items: flex-start;
@@ -794,7 +794,6 @@
             cursor: pointer;
             z-index: 2;
         }
-        /* Card badge for unlisted */
         .card-visibility.unlisted {
             background: rgb(241, 196, 15);
             color: white;
@@ -870,7 +869,10 @@
             <div class="input-error" id="inputError">Project name must be at least 3 characters and 64 characters or fewer.</div>
             <div class="suggestion-prompt">Not feeling creative at the moment? You can always rename your project later!</div>
             <div class="suggestions-row">
-                <!-- Suggestions will be filled by JS -->
+
+
+
+                
             </div>
             <div class="button-container">
                 <button type="button" class="cancel-btn">Cancel</button>
@@ -982,7 +984,6 @@
 </body>
 <script>
 window.addEventListener('DOMContentLoaded', function() {
-    // Random name generation
     function getRandomElement(arr) {
         return arr[Math.floor(Math.random() * arr.length)];
     }
@@ -1098,7 +1099,6 @@ window.addEventListener('DOMContentLoaded', function() {
             .replace(/(--|\/\*|\*\/|#|\b(select|insert|update|delete|drop|union|alter|create|replace|truncate|exec|script)\b)/gi, '')
             .replace(/\s{2,}/g, ' ');
         if (input.value !== sanitized) input.value = sanitized;
-        // Only updates lastTypedValue if the change was from typing, not from suggestion click
         const selected = suggestionsRow.querySelector('.suggestion.selected');
         if (selected && input.value !== selected.textContent) {
             selected.classList.remove('selected');
@@ -1128,7 +1128,6 @@ window.addEventListener('DOMContentLoaded', function() {
         transitionForms(document.getElementById('projectNameForm'), document.getElementById('emptyForm'), true);
     });
 
-    // Cancel/Back button handlers
     document.querySelectorAll('.cancel-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             const currentForm = this.closest('.project-form');
@@ -1292,7 +1291,6 @@ window.addEventListener('DOMContentLoaded', function() {
         const particles = [];
         const particleCount = isForward ? 200 : 67; 
         
-        // Color variations based on direction of pipline movement (i sthe user moving fwards in tyhe form or ,oving backwards)
         const colors = isForward ? [
             'rgba(188, 44, 10, 0.4)', 
             'rgba(220, 20, 60, 0.4)', 
@@ -1427,16 +1425,16 @@ window.addEventListener('DOMContentLoaded', function() {
 
 
     const COLOR_PALETTE = {
-        1: 'rgb(46, 213, 115)',    // Green
-        2: 'rgb(52, 152, 219)',       // Blue
-        3: 'rgb(231, 76, 60)',       // Red
-        4: 'rgb(241, 196, 15)',    // Yellow
-        5: 'rgb(155, 89, 182)',     // Purple
-        6: 'rgb(230, 126, 34)',    // range
-        7: 'rgb(26, 188, 156)',     // Turquoise
-        8: 'rgb(236, 240, 241)', // light Gray
-        9: 'rgb(149, 165, 166)',  // Dark Gray
-        10: 'rgb(243, 156, 18)'   // Gld
+        1: 'rgb(46, 213, 115)',
+        2: 'rgb(52, 152, 219)',
+        3: 'rgb(231, 76, 60)',
+        4: 'rgb(241, 196, 15)',
+        5: 'rgb(155, 89, 182)',
+        6: 'rgb(230, 126, 34)',
+        7: 'rgb(26, 188, 156)',
+        8: 'rgb(236, 240, 241)',
+        9: 'rgb(149, 165, 166)',
+        10: 'rgb(243, 156, 18)'
     };
     const DATABASE_ID = '6816dc7f00195dd533bf';
     const COLLECTION_ID = '6816de0600052ed834e4';
@@ -1474,7 +1472,6 @@ window.addEventListener('DOMContentLoaded', function() {
                     if (idx !== -1) selectedTags.splice(idx, 1);
                     tagDiv.remove();
                     renderSelectedTags();
-                    // Also remove from tag list visually
                     const tagList = document.getElementById('tagList');
                     Array.from(tagList.children).forEach(child => {
                         if (child.textContent === tag.text) child.remove();
@@ -1544,7 +1541,6 @@ window.addEventListener('DOMContentLoaded', function() {
                     tagDiv.textContent = tagText;
                     tagDiv.className = 'tag-pill';
                     tagDiv.style.setProperty('--tag-bg', bgColor);
-                    // Highlight if selected
                     if (selectedTags.some(t => t.text === tagText)) {
 
 

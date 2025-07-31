@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Source Resources - Splendor Web Client</title>
+    <link rel="icon" type="image/x-icon" href="Assets/SPLENDOR_ICON.ico">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@17.0.0"></script>
+    <style>
+        body {
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        body.fade-in {
+            opacity: 1;
+        }
+
+        .resources-container {
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 0;
+            position: relative;
+        }
+
+        .resources-content {
+            position: relative;
+            padding: 0;
+        }
+
+        .hero-section {
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #18181b 0%, #1a1a1d 50%, #18181b 100%);
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(29, 233, 182, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(29, 233, 182, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(29, 233, 182, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            position: relative;
+        }
+
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ececec 0%, #1DE9B6 30%, #00b894 70%, #ececec 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.04em;
+            line-height: 0.9;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: #a1a1aa;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .content-flow {
+            position: relative;
+            padding: 0;
+        }
+
+        .flow-section {
+            position: relative;
+            margin: 6rem 0;
+            padding: 0 2rem;
+        }
+
+        .flow-section:nth-child(odd) {
+            margin-left: 10%;
+            margin-right: 5%;
+        }
+
+        .flow-section:nth-child(even) {
+            margin-left: 5%;
+            margin-right: 10%;
+        }
+
+        .section-header {
+            position: relative;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #ececec;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #1DE9B6, transparent);
+            border-radius: 2px;
+        }
+
+        .section-description {
+            font-size: 1.1rem;
+            color: #a1a1aa;
+            max-width: 500px;
+            line-height: 1.6;
+        }
+
+        .platform-showcase {
+            background: linear-gradient(135deg, rgba(24, 24, 27, 0.9) 0%, rgba(35, 35, 42, 0.8) 100%);
+            margin: 0 0 3.5rem 0;
+            padding: 6rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .platform-showcase::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 20%, rgba(29, 233, 182, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(29, 233, 182, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .platform-item {
+            background: rgba(24, 24, 27, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 0;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .platform-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(29, 233, 182, 0.05) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .platform-item:hover::before {
+            opacity: 1;
+        }
+
+        .platform-item:hover {
+            transform: translateY(-12px) scale(1.03);
+            border-color: rgba(29, 233, 182, 0.3);
+            box-shadow: 
+                0 25px 80px rgba(29, 233, 182, 0.15),
+                0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .platform-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .platform-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ececec;
+            margin: 0;
+        }
+
+        .platform-link {
+            color: #1DE9B6;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.7rem !important;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.35rem 0.8rem !important;
+            border: 1px solid rgba(29, 233, 182, 0.2);
+            border-radius: 6px !important;
+        }
+
+        .platform-link:hover {
+            color: #00b894;
+            border-color: rgba(29, 233, 182, 0.5);
+            background: rgba(29, 233, 182, 0.05);
+        }
+
+        .platform-description {
+            color: #a1a1aa;
+            line-height: 1.7;
+            margin: 0;
+            font-size: 1.05rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .subsection-divider {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(29, 233, 182, 0.3), transparent);
+            margin: 4rem 0;
+            position: relative;
+        }
+
+        .subsection-divider::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            background: #1DE9B6;
+            border-radius: 50%;
+        }
+
+        .subsection-header {
+            margin-bottom: 3rem;
+        }
+
+        .subsection-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ececec;
+            margin-bottom: 0.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .subsection-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60%;
+            height: 2px;
+            background: linear-gradient(90deg, #1DE9B6, transparent);
+            border-radius: 1px;
+        }
+
+        .subsection-description {
+            font-size: 1rem;
+            color: #a1a1aa;
+            max-width: 400px;
+            line-height: 1.6;
+        }
+
+        .license-tag {
+            position: absolute;
+            bottom: 1rem;
+            left: 1.5rem;
+            background: rgba(29, 233, 182, 0.1);
+            color: #1DE9B6;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(29, 233, 182, 0.2);
+            backdrop-filter: blur(10px);
+            z-index: 3;
+            cursor: pointer;
+        }
+
+        .platform-item {
+            position: relative;
+        }
+
+        .resources-container {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.35) rgba(255,255,255,0.08);
+        }
+
+        .resources-container::-webkit-scrollbar {
+            width: 14px;
+            background: transparent;
+        }
+
+        .resources-container::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            margin: 4px;
+            border: 1px solid rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px) saturate(180%);
+        }
+
+        .resources-container::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.25);
+            border-radius: 10px;
+            border: 3px solid transparent;
+            background-clip: padding-box;
+            backdrop-filter: blur(12px) saturate(200%);
+            box-shadow: 
+                inset 0 0 0 1px rgba(255,255,255,0.1),
+                inset 0 0 8px rgba(255,255,255,0.2),
+                0 0 12px rgba(255,255,255,0.1);
+            transition: all 0.2s ease;
+        }
+
+        .resources-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.35);
+            box-shadow: 
+                inset 0 0 0 1px rgba(255,255,255,0.15),
+                inset 0 0 10px rgba(255,255,255,0.3),
+                0 0 14px rgba(255,255,255,0.15);
+        }
+
+        @media (max-width: 1024px) {
+            .hero-title {
+                font-size: 3.5rem;
+            }
+            
+            .flow-section:nth-child(odd),
+            .flow-section:nth-child(even) {
+                margin-left: 2rem;
+                margin-right: 2rem;
+            }
+            
+            .platform-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                height: 50vh;
+            }
+            
+            .hero-title {
+                font-size: 2.8rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .platform-item {
+                padding: 2rem;
+            }
+            
+            .flow-section {
+                padding: 0 1rem;
+            }
+        }
+    </style>
+    <style>
+    body.figma-theme {
+      background: #0a0a0a !important;
+      color: #ececec !important;
+    }
+    body.figma-theme nav {
+      background: #18191a !important;
+      color: #121214 !important;
+      border-bottom: 1px solid #23232a;
+      box-shadow: none !important;
+    }
+    body.figma-theme nav ul {
+      background: none !important;
+      border: none !important;
+    }
+    body.figma-theme nav li, body.figma-theme nav a, body.figma-theme nav div {
+      border-radius: 0 !important;
+      background: none !important;
+      color: #23232a !important;
+    }
+    body.figma-theme nav li {
+      border-right: none !important;
+    }
+    body.figma-theme nav li:last-child {
+      border-right: none !important;
+    }
+    body.figma-theme h3, body.figma-theme .hero-title, body.figma-theme .resource-name, body.figma-theme .platform-name {
+      color: #ececec !important;
+    }
+    body.figma-theme .strikethrough-grow div {
+      color: #ececec !important;
+      border-radius: 0 !important;
+    }
+    body.figma-theme .strikethrough-grow:hover div {
+      background: none !important;
+      color: inherit !important;
+    }
+    </style>
+    <style>
+    .barcode-lines {
+      width: 40px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      gap: 1px;
+    }
+    .barcode-line {
+      height: 100%;
+      background-color: #222;
+      flex-grow: 1;
+      transition: height 0.5s cubic-bezier(.4,0,.2,1);
+    }
+    .barcode-line.animated {
+      height: 45%;
+    }
+    .barcode-line:nth-last-child(2) {
+      background-color: #111;
+    }
+    .barcode-line:last-child {
+      background-color: #1DE9B6;
+    }
+    .barcode-text {
+      color: #222;
+      font-family: monospace;
+      font-size: 12px;
+      letter-spacing: 5px;
+      user-select: none;
+    }
+    .nav-animated-logo {
+      min-width: 90px;
+      min-height: 40px;
+    }
+    </style>
+    <style>
+    body.dark-mode nav, body.figma-theme.dark-mode nav {
+      background: #141416 !important;
+      color: #ececec !important;
+      border-bottom: 1px solid #23232a !important;
+    }
+    body.dark-mode {
+      background: #0a0a0a !important;
+    }
+    body.dark-mode .barcode-line,
+    body.figma-theme.dark-mode .barcode-line {
+      background-color: #444 !important;
+    }
+    body.dark-mode .barcode-line:nth-last-child(2),
+    body.figma-theme.dark-mode .barcode-line:nth-last-child(2) {
+      background-color: #222 !important;
+    }
+    body.dark-mode .barcode-line:last-child,
+    body.figma-theme.dark-mode .barcode-line:last-child {
+      background-color: #1DE9B6 !important;
+    }
+    body.dark-mode .barcode-text,
+    body.figma-theme.dark-mode .barcode-text {
+      color: #e0f7fa !important;
+    }
+    body.dark-mode nav li, body.dark-mode nav a, body.dark-mode nav div {
+      color: #464649 !important;
+    }
+    body.dark-mode .strikethrough-grow div {
+      color: #fff !important;
+    }
+    body.dark-mode .strikethrough-grow:after {
+      background: #fff !important;
+    }
+    body.dark-mode .strikethrough-grow:hover div {
+      color: #fff !important;
+    }
+    body.figma-theme.dark-mode .strikethrough-grow div {
+      color: #fff !important;
+    }
+    body.figma-theme.dark-mode .strikethrough-grow:after {
+      background: #fff !important;
+    }
+    body.figma-theme.dark-mode .strikethrough-grow:hover div {
+      color: #fff !important;
+    }
+    body.dark-mode .strikethrough-grow::before,
+    body.figma-theme.dark-mode .strikethrough-grow::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: #fff;
+      transform: scaleX(0);
+      transform-origin: 100% 50%;
+      transition: transform 0.3s cubic-bezier(0.4, 1, 0.8, 1);
+    }
+    body.dark-mode .strikethrough-grow:hover::before,
+    body.figma-theme.dark-mode .strikethrough-grow:hover::before {
+      transform: scaleX(1);
+      transform-origin: 0% 50%;
+      background-color: #fff;
+    }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="nav-animated-logo" style="display:flex;align-items:center;gap:10px;padding-left:20px;height:40px;justify-content:center;">
+        <div class="barcode" style="height:32px;display:flex;align-items:center;justify-content:center;margin-top:4px;margin-bottom:10px;">
+          <div class="barcode-lines" style="height:22px;width:40px;display:flex;align-items:center;gap:1px;">
+            <div class="barcode-line"></div>
+            <div class="barcode-line"></div>
+            <div class="barcode-line"></div>
+            <div class="barcode-line"></div>
+            <div class="barcode-line"></div>
+            <div class="barcode-line"></div>
+            <div class="barcode-line"></div>
+          </div>
+          <div class="barcode-text" style="font-size:11px;margin-left:7px;">SPLENDOR</div>
+        </div>
+      </div>
+      <ul>
+        <li><a href="index.html" class="strikethrough-grow"><div>Projects</div></a></li>
+        <li><a href="search.html" class="strikethrough-grow"><div>Search</div></a></li>
+        <li><a href="explore.html" class="strikethrough-grow"><div>Explore</div></a></li>
+        <li><a href="messages.html" class="strikethrough-grow"><div>Messages</div></a></li>
+        <li><a href="muse.html" class="strikethrough-grow" id="aiTab"><div>Muse</div></a></li>
+        <li><a href="#" class="strikethrough-grow" id="profileLink"><div>Profile</div></a></li>
+        <li id="logoutButton" style="display: none;"><a href="#" class="strikethrough-grow"><div>Logout</div></a></li>
+      </ul>
+    </nav>
+
+    <div class="resources-container">
+      <div class="resources-content">
+        <section class="hero-section">
+          <div class="hero-content">
+            <h1 class="hero-title">Open Source<br>Resources</h1>
+            <p class="hero-subtitle">Curated collection of essential JavaScript libraries, frameworks, and learning platforms to accelerate your development journey.</p>
+          </div>
+        </section>
+
+        <div class="content-flow">
+          <section class="platform-showcase">
+            <div class="section-header">
+              <h2 class="section-title">JavaScript Libraries & Frameworks</h2>
+              <p class="section-description">Essential tools and frameworks that power modern web development, from UI libraries to full-stack solutions.</p>
+            </div>
+            
+            <div class="platform-grid">
+              <div class="platform-item">
+                <div class="platform-header">
+                  <h3 class="platform-name">React</h3>
+                  <a href="https://react.dev" target="_blank" class="platform-link">Visit</a>
+                </div>
+                <p class="platform-description">A JavaScript library for building user interfaces, particularly single-page applications. React's component-based architecture and virtual DOM make it ideal for creating interactive UIs.</p>
+                <div class="license-tag">MIT</div>
+              </div>
+
+              <div class="platform-item">
+                <div class="platform-header">
+                  <h3 class="platform-name">Vue.js</h3>
+                  <a href="https://vuejs.org" target="_blank" class="platform-link">Visit</a>
+                </div>
+                <p class="platform-description">A progressive JavaScript framework for building user interfaces. Vue's gentle learning curve and excellent documentation make it perfect for both beginners and advanced developers.</p>
+                <div class="license-tag">MIT</div>
+              </div>
+
+              <div class="platform-item">
+                <div class="platform-header">
+                  <h3 class="platform-name">Angular</h3>
+                  <a href="https://angular.io" target="_blank" class="platform-link">Visit</a>
+                </div>
+                <p class="platform-description">A comprehensive platform for building scalable web applications. Angular provides a complete solution with built-in tools for routing, forms, and state management.</p>
+                <div class="license-tag">MIT</div>
+              </div>
+
+              <div class="platform-item">
+                <div class="platform-header">
+                  <h3 class="platform-name">Svelte</h3>
+                  <a href="https://svelte.dev" target="_blank" class="platform-link">Visit</a>
+                </div>
+                <p class="platform-description">A radical new approach to building user interfaces. Svelte shifts the work into a compile step that happens when you build your app, resulting in highly optimized vanilla JavaScript.</p>
+                <div class="license-tag">MIT</div>
+              </div>
+
+              <div class="platform-item">
+                <div class="platform-header">
+                  <h3 class="platform-name">Next.js</h3>
+                  <a href="https://nextjs.org" target="_blank" class="platform-link">Visit</a>
+                </div>
+                <p class="platform-description">A React framework that enables server-side rendering, static site generation, and more. Next.js provides an excellent developer experience with zero configuration.</p>
+                <div class="license-tag">MIT</div>
+              </div>
+
+              <div class="platform-item">
+                <div class="platform-header">
+                  <h3 class="platform-name">Nuxt.js</h3>
+                  <a href="https://nuxt.com" target="_blank" class="platform-link">Visit</a>
+                </div>
+                <p class="platform-description">A Vue.js framework that makes web development simple and powerful. Nuxt provides automatic routing, server-side rendering, and static site generation out of the box.</p>
+                <div class="license-tag">MIT</div>
+              </div>
+
+              <div class="platform-item">
+                <div class="platform-header">
+                  <h3 class="platform-name">TypeScript</h3>
+                  <a href="https://www.typescriptlang.org" target="_blank" class="platform-link">Visit</a>
+                </div>
+                <p class="platform-description">A strongly typed programming language that builds on JavaScript. TypeScript adds optional static types, classes, and modules to JavaScript, making it more robust and maintainable.</p>
+                <div class="license-tag">Apache 2.0</div>
+              </div>
+
+              <div class="platform-item">
+                <div class="platform-header">
+                  <h3 class="platform-name">Tailwind CSS</h3>
+                  <a href="https://tailwindcss.com" target="_blank" class="platform-link">Visit</a>
+                </div>
+                <p class="platform-description">A utility-first CSS framework for rapidly building custom user interfaces. Tailwind provides low-level utility classes that let you build completely custom designs without leaving your HTML.</p>
+                <div class="license-tag">MIT</div>
+              </div>
+
+              <div class="platform-item">
+                <div class="platform-header">
+                  <h3 class="platform-name">Three.js</h3>
+                  <a href="https://threejs.org" target="_blank" class="platform-link">Visit</a>
+                </div>
+                <p class="platform-description">A cross-browser JavaScript library and application programming interface used to create and display animated 3D computer graphics in a web browser using WebGL.</p>
+                <div class="license-tag">MIT</div>
+              </div>
+
+              <div class="platform-item">
+                <div class="platform-header">
+                  <h3 class="platform-name">D3.js</h3>
+                  <a href="https://d3js.org" target="_blank" class="platform-link">Visit</a>
+                </div>
+                <p class="platform-description">A JavaScript library for producing dynamic, interactive data visualizations in web browsers. D3 makes it easy to bind arbitrary data to a DOM and apply data-driven transformations.</p>
+                <div class="license-tag">BSD-3</div>
+              </div>
+            </div>
+
+            <div class="subsection-divider"></div>
+            
+            <div class="subsection-header">
+              <h3 class="subsection-title">Animation Libraries</h3>
+              <p class="subsection-description">Powerful libraries for creating smooth animations, transitions, and interactive experiences in web applications.</p>
+            </div>
+            
+            <div class="platform-grid">
+              <div class="platform-item">
+                <div class="platform-header">
+                  <h3 class="platform-name">Anime.js</h3>
+                  <a href="https://animejs.com" target="_blank" class="platform-link">Visit</a>
+                </div>
+                <p class="platform-description">A lightweight JavaScript animation library with a simple yet powerful API. Anime.js makes it easy to animate CSS properties, SVG, DOM attributes, and JavaScript objects.</p>
+                <div class="license-tag">MIT</div>
+              </div>
+
+              <div class="platform-item">
+                <div class="platform-header">
+                  <h3 class="platform-name">Framer Motion</h3>
+                  <a href="https://www.framer.com/motion" target="_blank" class="platform-link">Visit</a>
+                </div>
+                <p class="platform-description">A production-ready motion library for React. Framer Motion provides declarative animations, gestures, and drag-and-drop functionality with an intuitive API.</p>
+                <div class="license-tag">MIT</div>
+              </div>
+
+              <div class="platform-item">
+                <div class="platform-header">
+                  <h3 class="platform-name">Lottie</h3>
+                  <a href="https://lottiefiles.com" target="_blank" class="platform-link">Visit</a>
+                </div>
+                <p class="platform-description">A library for rendering After Effects animations as vectors on the web. Lottie enables designers to create complex animations and export them as lightweight JSON files.</p>
+                <div class="license-tag">Apache 2.0</div>
+              </div>
+
+              <div class="platform-item">
+                <div class="platform-header">
+                  <h3 class="platform-name">AOS</h3>
+                  <a href="https://michalsnik.github.io/aos" target="_blank" class="platform-link">Visit</a>
+                </div>
+                <p class="platform-description">Animate On Scroll library that allows you to animate elements as you scroll down the page. AOS provides smooth animations triggered by scroll position.</p>
+                <div class="license-tag">MIT</div>
+              </div>
+
+              <div class="platform-item">
+                <div class="platform-header">
+                  <h3 class="platform-name">Velocity.js</h3>
+                  <a href="http://velocityjs.org" target="_blank" class="platform-link">Visit</a>
+                </div>
+                <p class="platform-description">A fast animation engine with the same API as jQuery's $.animate(). Velocity.js provides excellent performance and is designed to work seamlessly with jQuery.</p>
+                <div class="license-tag">MIT</div>
+              </div>
+
+              <div class="platform-item">
+                <div class="platform-header">
+                  <h3 class="platform-name">Popmotion</h3>
+                  <a href="https://popmotion.io" target="_blank" class="platform-link">Visit</a>
+                </div>
+                <p class="platform-description">A functional, reactive animation library for the web. Popmotion provides a simple API for creating complex animations with spring physics and gesture recognition.</p>
+                <div class="license-tag">MIT</div>
+              </div>
+
+              <div class="platform-item">
+                <div class="platform-header">
+                  <h3 class="platform-name">Mo.js</h3>
+                  <a href="https://mojs.github.io" target="_blank" class="platform-link">Visit</a>
+                </div>
+                <p class="platform-description">A JavaScript motion graphics library for the web. Mo.js provides tools for creating stunning motion graphics and micro-interactions with declarative syntax.</p>
+                <div class="license-tag">MIT</div>
+              </div>
+
+              <div class="platform-item">
+                <div class="platform-header">
+                  <h3 class="platform-name">KUTE.js</h3>
+                  <a href="https://thednp.github.io/kute.js" target="_blank" class="platform-link">Visit</a>
+                </div>
+                <p class="platform-description">A native JavaScript animation engine for modern browsers. KUTE.js provides smooth animations with excellent performance and a comprehensive set of easing functions.</p>
+                <div class="license-tag">MIT</div>
+              </div>
+            </div>
+
+            <div class="subsection-divider"></div>
+            
+            <div class="subsection-header">
+              <h3 class="subsection-title">Learning Platforms & Communities</h3>
+              <p class="subsection-description">Essential resources for learning, collaboration, and staying connected with the developer community.</p>
+            </div>
+            
+            <div class="platform-grid">
+              <div class="platform-item">
+                <div class="platform-header">
+                  <h3 class="platform-name">MDN Web Docs</h3>
+                  <a href="https://developer.mozilla.org" target="_blank" class="platform-link">Visit</a>
+                </div>
+                <p class="platform-description">The Mozilla Developer Network provides comprehensive documentation for web technologies. Learn HTML, CSS, JavaScript, and web APIs with detailed guides and examples.</p>
+                <div class="license-tag">CC BY-SA</div>
+              </div>
+
+              <div class="platform-item">
+                <div class="platform-header">
+                  <h3 class="platform-name">freeCodeCamp</h3>
+                  <a href="https://www.freecodecamp.org" target="_blank" class="platform-link">Visit</a>
+                </div>
+                <p class="platform-description">A free, self-paced coding bootcamp that teaches web development, data science, and more. Earn certifications and build real-world projects while learning.</p>
+                <div class="license-tag">BSD-3</div>
+              </div>
+
+              <div class="platform-item">
+                <div class="platform-header">
+                  <h3 class="platform-name">The Odin Project</h3>
+                  <a href="https://www.theodinproject.com" target="_blank" class="platform-link">Visit</a>
+                </div>
+                <p class="platform-description">A free, open-source curriculum for learning full-stack web development. The Odin Project provides a structured path from beginner to job-ready developer.</p>
+                <div class="license-tag">MIT</div>
+              </div>
+
+              <div class="platform-item">
+                <div class="platform-header">
+                  <h3 class="platform-name">Open Source Guides</h3>
+                  <a href="https://opensource.guide" target="_blank" class="platform-link">Visit</a>
+                </div>
+                <p class="platform-description">A collection of resources for individuals, communities, and companies who want to learn how to run and contribute to an open source project.</p>
+                <div class="license-tag">CC BY-SA</div>
+              </div>
+
+              <div class="platform-item">
+                <div class="platform-header">
+                  <h3 class="platform-name">Open Source Initiative</h3>
+                  <a href="https://opensource.org" target="_blank" class="platform-link">Visit</a>
+                </div>
+                <p class="platform-description">A global non-profit organization that educates about and advocates for the benefits of open source software and communities.</p>
+                <div class="license-tag">CC BY</div>
+              </div>
+
+              <div class="platform-item">
+                <div class="platform-header">
+                  <h3 class="platform-name">GitHub Learning Lab</h3>
+                  <a href="https://lab.github.com" target="_blank" class="platform-link">Visit</a>
+                </div>
+                <p class="platform-description">Learn GitHub through interactive courses with real repositories. Master Git, GitHub, and open source workflows through hands-on projects.</p>
+                <div class="license-tag">MIT</div>
+              </div>
+
+              <div class="platform-item">
+                <div class="platform-header">
+                  <h3 class="platform-name">Open Source Society</h3>
+                  <a href="https://github.com/ossu/computer-science" target="_blank" class="platform-link">Visit</a>
+                </div>
+                <p class="platform-description">A complete education in computer science using open source curriculum. Path to a free self-taught education in Computer Science.</p>
+                <div class="license-tag">MIT</div>
+              </div>
+
+              <div class="platform-item">
+                <div class="platform-header">
+                  <h3 class="platform-name">Open Source Design</h3>
+                  <a href="https://opensourcedesign.net" target="_blank" class="platform-link">Visit</a>
+                </div>
+                <p class="platform-description">A community of designers and developers pushing more open design processes and improving the design of open source software.</p>
+                <div class="license-tag">CC BY-SA</div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <footer style="background: #0a0a0a; border-top: 1px solid rgba(29, 233, 182, 0.1); padding: 3rem 2rem; margin-top: 4rem;">
+          <div style="max-width: 1200px; margin: 0 auto;">
+            <h3 style="color: #ececec; font-size: 1.5rem; margin-bottom: 2rem; text-align: center;">Open Source License Types</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+              <div style="background: rgba(24, 24, 27, 0.6); padding: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.05);" class="license-expl-box">
+                <h4 style="color: #1DE9B6; font-size: 1.1rem; margin-bottom: 0.5rem;" id="license-mit">MIT License</h4>
+                <p style="color: #a1a1aa; font-size: 0.9rem; line-height: 1.5;">The most permissive open source license. Allows commercial use, modification, distribution, and private use with minimal restrictions. Only requires preservation of copyright and license notices.</p>
+              </div>
+              <div style="background: rgba(24, 24, 27, 0.6); padding: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.05);" class="license-expl-box">
+                <h4 style="color: #1DE9B6; font-size: 1.1rem; margin-bottom: 0.5rem;" id="license-apache">Apache 2.0 License</h4>
+                <p style="color: #a1a1aa; font-size: 0.9rem; line-height: 1.5;">A permissive license that allows commercial use, modification, and distribution. Includes patent protection and requires preservation of copyright notices and license text.</p>
+              </div>
+              <div style="background: rgba(24, 24, 27, 0.6); padding: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.05);" class="license-expl-box">
+                <h4 style="color: #1DE9B6; font-size: 1.1rem; margin-bottom: 0.5rem;" id="license-bsd">BSD-3 License</h4>
+                <p style="color: #a1a1aa; font-size: 0.9rem; line-height: 1.5;">A permissive license similar to MIT. Allows commercial use, modification, and distribution with minimal restrictions. Requires preservation of copyright notices.</p>
+              </div>
+              <div style="background: rgba(24, 24, 27, 0.6); padding: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.05);" class="license-expl-box">
+                <h4 style="color: #1DE9B6; font-size: 1.1rem; margin-bottom: 0.5rem;" id="license-ccby">CC BY License</h4>
+                <p style="color: #a1a1aa; font-size: 0.9rem; line-height: 1.5;">Creative Commons Attribution license. Allows commercial use, modification, and distribution as long as the original author is credited. Most permissive CC license.</p>
+              </div>
+              <div style="background: rgba(24, 24, 27, 0.6); padding: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.05);" class="license-expl-box">
+                <h4 style="color: #1DE9B6; font-size: 1.1rem; margin-bottom: 0.5rem;" id="license-ccbysa">CC BY-SA License</h4>
+                <p style="color: #a1a1aa; font-size: 0.9rem; line-height: 1.5;">Creative Commons Attribution-ShareAlike license. Allows commercial use, modification, and distribution, but derivative works must be licensed under the same terms.</p>
+              </div>
+            </div>
+            <p style="color: #a1a1aa; text-align: center; margin-top: 2rem; font-size: 0.9rem;">All resources listed above are truly open source and free to use, modify, and distribute according to their respective licenses.<br><span style='color:#888'>However, SPLENDOR and APOTH do not guarantee the accuracy, legality, or continued availability of these resources and are not liable for any issues arising from their use.</span></p>
+          </div>
+        </footer>
+      </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+    (function() {
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.classList.add('fade-in');
+            
+            document.body.classList.add('figma-theme', 'dark-mode');
+            
+            const profileLink = document.getElementById('profileLink');
+            profileLink.addEventListener('click', async function(e) {
+                e.preventDefault();
+                try {
+                    const user = await window.account.get();
+                    window.location.href = `profile.html?id=${user.$id}`;
+                } catch (error) {
+                    console.error('Error getting user:', error);
+                    window.location.href = 'Login.html';
+                }
+            });
+
+            const logoutButton = document.getElementById('logoutButton');
+            if (logoutButton) {
+                logoutButton.addEventListener('click', async function(e) {
+                    e.preventDefault();
+                    try {
+                        await window.account.deleteSession('current');
+                        window.location.href = 'Login.html';
+                    } catch (error) {
+                        console.error('Error logging out:', error);
+                    }
+                });
+            }
+        });
+    })();
+    </script>
+    <script>
+    (function() {
+      const barcodeLines = document.querySelectorAll('.barcode-line');
+      const barCount = barcodeLines.length;
+      const waveDuration = 700;
+      const barDelay = 80;
+
+      function animateWave() {
+        barcodeLines.forEach((bar, i) => {
+          setTimeout(() => {
+            bar.classList.add('animated');
+            setTimeout(() => {
+              bar.classList.remove('animated');
+            }, waveDuration / 2);
+          }, i * barDelay);
+        });
+      }
+
+      setInterval(animateWave, waveDuration + barCount * barDelay / 2);
+      animateWave();
+    })();
+    </script>
+    <script>
+    (function() {
+      const licenseMap = {
+        'MIT': 'license-mit',
+        'Apache 2.0': 'license-apache',
+        'BSD-3': 'license-bsd',
+        'CC BY': 'license-ccby',
+        'CC BY-SA': 'license-ccbysa'
+      };
+      function getBoxForId(id) {
+        const heading = document.getElementById(id);
+        return heading ? heading.closest('.license-expl-box') : null;
+      }
+      function highlightBoxAfterScroll(box) {
+        if (!box) return;
+        setTimeout(() => {
+          box.classList.add('license-highlight');
+          setTimeout(() => box.classList.remove('license-highlight'), 2000);
+        }, 400);
+      }
+      document.querySelectorAll('.license-tag').forEach(tag => {
+        tag.addEventListener('click', function() {
+          const license = tag.textContent.trim();
+          const id = licenseMap[license];
+          if (!id) return;
+          const heading = document.getElementById(id);
+          const box = getBoxForId(id);
+          if (!heading || !box) return;
+          heading.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          highlightBoxAfterScroll(box);
+        });
+      });
+    })();
+    </script>
+    <style>
+    .license-expl-box.license-highlight {
+      background: #1DE9B6 !important;
+      color: #18181b !important;
+      box-shadow: 0 0 0 4px #1DE9B633, 0 2px 24px #1DE9B688;
+      transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+    }
+    .license-expl-box.license-highlight h4,
+    .license-expl-box.license-highlight p {
+      color: #18181b !important;
+    }
+    </style>
+  </body>
+</html> 

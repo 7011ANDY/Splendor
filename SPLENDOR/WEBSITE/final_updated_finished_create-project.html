@@ -1,0 +1,2037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Splendor - Create Project</title>
+    <link rel="icon" type="image/x-icon" href="Assets/SPLENDOR_ICON.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@17.0.0"></script>
+    <script src="auth.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            min-height: 100vh;
+            min-width: 100vw;
+            display: flex;
+            flex-direction: row;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-image: url('Assets/andrew-kliatskyi-9l_R8EBQ7-c-unsplash.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            padding: 20px;
+            box-sizing: border-box;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+        }
+        .floating-window {
+            width: 95%;
+            max-width: 1400px;
+            aspect-ratio: 16/10;
+            max-height: 95vh;
+            margin: auto;
+            display: flex;
+            background: #fff;
+            border-radius: 40px;
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.5),
+                        0 15px 35px rgba(0, 0, 0, 0.4),
+                        0 5px 15px rgba(0, 0, 0, 0.3),
+                        0 0 0 0.5px rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .login-bg {
+            flex: 1 1 50%;
+            background: url('Assets/pawel-czerwinski-MV3m16xvUtg-unsplash.jpg') center center/cover no-repeat;
+            min-width: 0;
+            height: 100%;
+            border-radius: 35px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .flagship-innovation {
+            position: absolute;
+            top: 24px;
+            left: 32px;
+            display: flex;
+            align-items: center;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 0.92rem;
+            color: #f3f3f3;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+            opacity: 0.85;
+            z-index: 2;
+        }
+        .flagship-innovation .flagship-line {
+            display: inline-block;
+            height: 1px;
+            background: #f3f3f3;
+            opacity: 0.5;
+            margin-left: 16px;
+            min-width: 120px;
+            width: 18vw;
+            max-width: 220px;
+            transform: scaleX(0);
+            transform-origin: left;
+        }
+        .flagship-innovation.animate .flagship-line {
+            animation: drawLine 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+        }
+        @keyframes drawLine {
+            to {
+                transform: scaleX(1);
+            }
+        }
+        .quote-left {
+            position: absolute;
+            left: 32px;
+            bottom: 32px;
+            color: #fff;
+            font-family: 'Bodoni Moda', serif;
+            z-index: 2;
+            max-width: 40%;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.45);
+        }
+        .quote-right {
+            position: absolute;
+            right: 32px;
+            bottom: 32px;
+            color: #fff;
+            font-family: 'Bodoni Moda', serif;
+            z-index: 2;
+            max-width: 40%;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.45);
+            text-align: right;
+        }
+        .quote-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.4rem;
+            font-weight: 500;
+            font-stretch: normal;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+        .quote-sub {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.15rem;
+            font-weight: 300;
+            margin-top: 20px;
+            margin-bottom: 1.15rem;
+            color: #f3f3f3;
+            line-height: 1.4;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        .quote-sub2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.05rem;
+            font-weight: 300;
+            color: #f3f3f3;
+            margin-top: 8px;
+            line-height: 1.4;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        .quote-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.6;
+            margin-bottom: 16px;
+            font-style: italic;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        .quote-author {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            font-weight: 300;
+            color: #f3f3f3;
+            opacity: 0.9;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        .quote-sub em {
+            font-style: italic;
+        }
+        .quote-sub u {
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+        .login-content {
+            flex: 1 1 50%;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            min-width: 320px;
+            box-sizing: border-box;
+            position: relative;
+            padding-top: 48px;
+        }
+        .login-logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            position: absolute;
+            top: 24px;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            padding-top: 0;
+            z-index: 10;
+        }
+        .login-logo img {
+            max-width: 160px;
+            height: auto;
+            display: block;
+        }
+        .login-form {
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+            box-sizing: border-box;
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
+                        transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        .login-form.fade-out {
+            opacity: 0;
+            transform: translateY(-20px) scale(0.95);
+            pointer-events: none;
+        }
+        .login-form.fade-in {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        .login-form.initial-load {
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+        }
+        
+        /* Stagger animations for form elements */
+        .login-form.fade-in h2,
+        .login-form.fade-in .input-group,
+        .login-form.fade-in .suggestions-container,
+        .login-form.fade-in .visibility-options,
+        .login-form.fade-in .tags-container,
+        .login-form.fade-in .confirmation-summary,
+        .login-form.fade-in .button-row {
+            opacity: 0;
+            transform: translateY(10px);
+            animation: staggerFadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        .login-form.fade-in h2 { animation-delay: 0.1s; }
+        .login-form.fade-in .input-group { animation-delay: 0.2s; }
+        .login-form.fade-in .suggestions-container { animation-delay: 0.3s; }
+        .login-form.fade-in .visibility-options { animation-delay: 0.3s; }
+        .login-form.fade-in .tags-container { animation-delay: 0.3s; }
+        .login-form.fade-in .confirmation-summary { animation-delay: 0.3s; }
+        .login-form.fade-in .button-row { animation-delay: 0.4s; }
+        
+        @keyframes staggerFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            color: #333;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            background: #fff;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+        textarea {
+            resize: none;
+            min-height: 100px;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #23272e;
+            box-shadow: 0 0 0 2px rgba(35, 39, 46, 0.1);
+        }
+        input::placeholder, textarea::placeholder {
+            color: #666;
+        }
+        .char-counter {
+            position: absolute;
+            top: -20px;
+            right: 0;
+            font-size: 0.8rem;
+            color: #666;
+        }
+        .char-counter.over {
+            color: #dc2626;
+        }
+        .suggestions-container {
+            margin-bottom: 20px;
+        }
+        .suggestion-prompt {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .suggestions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .suggestion-item {
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        .suggestion-item:hover {
+            background: #e9ecef;
+            border-color: #23272e;
+        }
+        .suggestion-item.selected {
+            background: #23272e;
+            color: white;
+            border-color: #23272e;
+        }
+        .visibility-options {
+            display: flex;
+            flex-direction: row;
+            gap: 15px;
+            margin-bottom: 20px;
+            justify-content: space-between;
+        }
+        .visibility-btn {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 20px 15px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            background: #fff;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            min-height: 120px;
+            justify-content: center;
+        }
+        .visibility-btn:hover {
+            border-color: #228B22;
+            box-shadow: 0 0 0 2px rgba(34, 139, 34, 0.1);
+            transform: translateY(-2px);
+        }
+        .visibility-btn[data-visibility="public"]:hover {
+            border-color: #228B22;
+            box-shadow: 0 0 0 2px rgba(34, 139, 34, 0.1);
+            background: rgba(34, 139, 34, 0.05);
+            color: #333;
+        }
+        .visibility-btn[data-visibility="unlisted"]:hover {
+            border-color: #FFD700;
+            box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.1);
+            background: rgba(255, 215, 0, 0.05);
+            color: #333;
+        }
+        .visibility-btn[data-visibility="private"]:hover {
+            border-color: #800020;
+            box-shadow: 0 0 0 2px rgba(128, 0, 32, 0.1);
+            background: rgba(128, 0, 32, 0.05);
+            color: #333;
+        }
+        .visibility-btn.selected {
+            background: #23272e;
+            color: white;
+            border-color: #23272e;
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+        .visibility-btn[data-visibility="public"].selected {
+            background: #228B22; /* Verdant green */
+            border-color: #228B22;
+            color: white;
+            opacity: 0.9;
+        }
+        .visibility-btn[data-visibility="unlisted"].selected {
+            background: #FFD700; /* Fuego yellow */
+            border-color: #FFD700;
+            color: #333;
+            opacity: 0.9;
+        }
+        .visibility-btn[data-visibility="private"].selected {
+            background: #800020; /* Burgundy red */
+            border-color: #800020;
+            color: white;
+            opacity: 0.9;
+        }
+        .visibility-icon {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+        }
+        .visibility-btn span {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .visibility-description {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            line-height: 1.3;
+        }
+        .tags-container {
+            margin-bottom: 20px;
+        }
+        .existing-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+        .tag-item {
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+        .tag-item:hover {
+            transform: translateY(-1px);
+        }
+        .tag-item.selected {
+            border-color: #23272e;
+            box-shadow: 0 0 0 2px rgba(35, 39, 46, 0.1);
+        }
+        .create-tag-section {
+            margin-bottom: 20px;
+        }
+        .input-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .input-row input {
+            flex: 1;
+        }
+        .input-row select {
+            width: 120px;
+        }
+        .input-row button {
+            width: auto;
+            padding: 12px 20px;
+        }
+        .selected-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            min-height: 40px;
+            padding: 10px;
+            border: 1px dashed #ddd;
+            border-radius: 8px;
+        }
+        .selected-tag {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .remove-tag {
+            background: none;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0;
+            width: auto;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .confirmation-summary {
+            text-align: left;
+            margin-bottom: 20px;
+            padding: 24px;
+            background: #fdfdff;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            animation: staggerFadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            animation-delay: 0.3s;
+        }
+        .confirmation-item {
+            margin-bottom: 18px;
+            font-size: 1.05rem;
+            color: #495057;
+            padding-bottom: 18px;
+            border-bottom: 1px solid #e9ecef;
+            line-height: 1.5;
+        }
+        .confirmation-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        .confirmation-item strong {
+            color: #23272e;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .confirmation-tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .button-row {
+            display: flex;
+            gap: 15px;
+        }
+        .button-row button {
+            flex: 1;
+        }
+        button {
+            width: 100%;
+            padding: 12px 28px;
+            border: none;
+            border-radius: 8px;
+            background: #23272e;
+            color: #fff;
+            font-size: 1.08rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 2px 2px 8px rgba(184, 185, 190, 0.2);
+        }
+        button:hover {
+            background: #321a4d;
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(50, 26, 77, 0.18);
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+            opacity: 0.6;
+        }
+        
+        button:disabled:hover {
+            background: #ccc;
+            box-shadow: none;
+        }
+        .error-message {
+            color: #dc2626;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+        .error-message.show {
+            display: block;
+        }
+        .input-group.error input,
+        .input-group.error textarea,
+        .tags-container.error {
+            border-color: #dc2626;
+            box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1);
+        }
+        
+        .tags-container.error .selected-tags {
+            border-color: #dc2626;
+        }
+        
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10001;
+            pointer-events: all;
+        }
+        .loading-content {
+            text-align: center;
+            color: white;
+        }
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #1DE9B6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-text {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        .loading-subtext {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        /* Error Alert Modal */
+        .error-alert-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            padding: 20px;
+        }
+        .error-alert-content {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        .error-alert-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 20px;
+            background: #fee2e2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .error-alert-icon svg {
+            width: 32px;
+            height: 32px;
+            color: #dc2626;
+        }
+        .error-alert-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+        .error-alert-message {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+        .error-alert-button {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .error-alert-button:hover {
+            background: #b91c1c;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+            }
+            .floating-window {
+                width: 95%;
+                aspect-ratio: auto;
+                height: auto;
+                min-height: 80vh;
+            }
+            .login-bg {
+                display: none;
+            }
+            .login-content {
+                flex: none;
+                width: 100%;
+                min-width: 0;
+                min-height: 100%;
+                background: #ffffff !important;
+                border-radius: 18px;
+                box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.1);
+                padding: 40px 20px;
+                align-items: center;
+                justify-content: flex-start;
+                text-align: center;
+            }
+            .login-form {
+                padding: 20px;
+            }
+            h2 {
+                font-size: 1.4rem;
+            }
+            .flagship-innovation {
+                top: 12px;
+                left: 12px;
+                font-size: 0.78rem;
+            }
+            .flagship-innovation .flagship-line {
+                min-width: 60px;
+                width: 22vw;
+                max-width: 120px;
+            }
+            .suggestions-grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+            .visibility-options {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .visibility-btn {
+                padding: 12px;
+                min-height: auto;
+            }
+            .input-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .input-row select,
+            .input-row button {
+                width: 100%;
+            }
+            .quote-left {
+                max-width: 95%;
+            }
+            .quote-right {
+                max-width: 95%;
+                text-align: left;
+                right: 16px;
+                bottom: 16px;
+            }
+            .quote-title {
+                font-size: 1.8rem;
+                line-height: 1.2;
+                margin-bottom: 15px;
+            }
+            .quote-sub {
+                font-size: 0.8rem;
+                margin-top: 15px;
+                line-height: 1.3;
+            }
+            .quote-text {
+                font-size: 0.9rem;
+                margin-bottom: 12px;
+                line-height: 1.4;
+            }
+            .quote-author {
+                font-size: 0.8rem;
+                line-height: 1.3;
+            }
+        }
+        .inner-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('Assets/pawel-czerwinski-MV3m16xvUtg-unsplash.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 20px;
+            z-index: -1;
+        }
+
+        /* Page Loader Styles */
+        .page-loader-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: 100vw; height: 100vh;
+            background: #090a0c;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1.2s;
+        }
+        .page-loader-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .loader-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .circular-progress {
+            margin-bottom: 24px;
+            display: block;
+        }
+        .progress-bg {
+            stroke: #222;
+        }
+        .progress-bar {
+            stroke: #fff;
+            transition: stroke-dashoffset 0.3s linear;
+        }
+        .progress-fill {
+            transition: r 0.55s cubic-bezier(.4,0,.2,1);
+        }
+        @keyframes loaderFloat {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+            100% { transform: translateY(0); }
+        }
+        .loader-text {
+            color: #fff;
+            font-size: 1.18rem;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            line-height: 2.1;
+            text-align: center;
+            animation: loaderFloat 1.6s ease-in-out infinite;
+            margin-top: 32px;
+        }
+        .loader-grid {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: 100vw; height: 100vh;
+            display: grid;
+            z-index: 1;
+        }
+        .loader-cube {
+            background: rgba(20,20,22,0.12);
+            transition: background 0.18s;
+            pointer-events: auto;
+        }
+        .loader-cube.highlight, .loader-cube:hover {
+            background: rgba(60,255,180,0.10);
+        }
+        .page-loader-overlay .loader-content {
+            z-index: 2;
+            position: relative;
+            pointer-events: none;
+        }
+        .page-loader-overlay, .page-loader-overlay * {
+            user-select: none;
+        }
+        
+        /* Cancel button styles */
+        .cancel-link {
+            position: absolute;
+            bottom: 20px;
+            right: 50%;
+            transform: translateX(50%);
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s ease;
+            z-index: 10;
+        }
+        .cancel-link:hover {
+            color: #333;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div id="pageLoader" class="page-loader-overlay">
+        <div class="loader-grid"></div>
+        <div class="loader-content">
+            <svg class="circular-progress" width="80" height="80" viewBox="0 0 80 80">
+                <circle class="progress-bg" cx="40" cy="40" r="36" fill="none" stroke="#222" stroke-width="3" />
+                <circle class="progress-bar" cx="40" cy="40" r="36" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-dasharray="226.1946710584651" stroke-dashoffset="226.1946710584651" />
+                <circle class="progress-fill" cx="40" cy="40" r="0" fill="#fff" />
+            </svg>
+            <div class="loader-text">Loading Project Creator</div>
+        </div>
+    </div>
+    <div class="floating-window">
+        <div class="login-bg">
+            <div class="flagship-innovation">AN APOTH PRODUCT<span class="flagship-line"></span></div>
+            <div class="quote-left">
+                <div class="quote-title">Launch your next <strong>masterpiece</strong></div>
+                <div class="quote-sub">Not just code — <u>composition</u>.</div>
+            </div>
+            <div class="quote-right">
+                <div class="quote-text" id="randomQuote"></div>
+                <div class="quote-author">— <span id="quoteAuthor"></span></div>
+            </div>
+        </div>
+        <div class="login-content">
+            <div class="login-logo">
+                <img src="Assets/Splendor.png" alt="Splendor Logo">
+            </div>
+            
+            <!-- Step 1: Project Name -->
+            <form class="login-form" id="step1Form">
+                <h2>What should we call your project?</h2>
+                <div class="input-group">
+                    <input type="text" id="projectName" placeholder="Project Name" required maxlength="64">
+                    <div class="char-counter" id="nameCharCounter">0 / 64</div>
+                </div>
+                <div class="suggestions-container">
+                    <p class="suggestion-prompt">Not feeling creative? Try one of these:</p>
+                    <div class="suggestions-grid" id="nameSuggestions"></div>
+                </div>
+                <div class="error-message" id="projectNameError"></div>
+                <button type="button" id="step1Next">Next</button>
+            </form>
+
+            <!-- Step 2: Project Description -->
+            <form class="login-form" id="step2Form" style="display: none;">
+                <h2>How should we describe your project?</h2>
+                <div class="input-group">
+                                    <textarea id="projectDescription" placeholder="Project Description" rows="4" required maxlength="99"></textarea>
+                <div class="char-counter" id="descCharCounter">0 / 99</div>
+                </div>
+                <div class="error-message" id="projectDescriptionError"></div>
+                <div class="button-row">
+                    <button type="button" id="step2Back">Back</button>
+                    <button type="button" id="step2Next">Next</button>
+                </div>
+            </form>
+
+            <!-- Step 3: Visibility -->
+            <form class="login-form" id="step3Form" style="display: none;">
+                <h2>Is your idea ready for the world to see?</h2>
+                <div class="visibility-options">
+                    <button type="button" class="visibility-btn" data-visibility="public">
+                        <svg viewBox="0 0 24 24" class="visibility-icon">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                        </svg>
+                        <span>Public</span>
+                        <div class="visibility-description">Anyone can view your project</div>
+                    </button>
+                    <button type="button" class="visibility-btn" data-visibility="unlisted">
+                        <svg viewBox="0 0 24 24" class="visibility-icon">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-9h10v2H7z"/>
+                        </svg>
+                        <span>Unlisted</span>
+                        <div class="visibility-description">Only people with the link can view</div>
+                    </button>
+                    <button type="button" class="visibility-btn" data-visibility="private">
+                        <svg viewBox="0 0 24 24" class="visibility-icon">
+                            <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+                        </svg>
+                        <span>Private</span>
+                        <div class="visibility-description">Only you can view your project</div>
+                    </button>
+                </div>
+                <div class="error-message" id="visibilityError"></div>
+                <div class="button-row">
+                    <button type="button" id="step3Back">Back</button>
+                    <button type="button" id="step3Next">Next</button>
+                </div>
+            </form>
+
+            <!-- Step 4: Tags -->
+            <form class="login-form" id="step4Form" style="display: none;">
+                <h2>Add tags to your project</h2>
+                <div class="tags-container">
+                    <div class="existing-tags" id="existingTags"></div>
+                    <div class="create-tag-section">
+                        <div class="input-row">
+                            <input type="text" id="newTagInput" placeholder="Create new tag..." maxlength="20">
+                            <select id="tagColorSelect">
+                                <option value="1">Green</option>
+                                <option value="2">Blue</option>
+                                <option value="3">Red</option>
+                                <option value="4">Yellow</option>
+                                <option value="5">Purple</option>
+                                <option value="6">Orange</option>
+                                <option value="7">Turquoise</option>
+                                <option value="8">Light Gray</option>
+                                <option value="9">Dark Gray</option>
+                                <option value="10">Gold</option>
+                            </select>
+                            <button type="button" id="createTagBtn">Add</button>
+                        </div>
+                    </div>
+                    <div class="selected-tags" id="selectedTags"></div>
+                </div>
+                <div class="error-message" id="tagsError"></div>
+                <div class="button-row">
+                    <button type="button" id="step4Back">Back</button>
+                    <button type="button" id="step4Next">Next</button>
+                </div>
+            </form>
+
+            <!-- Step 5: Confirmation -->
+            <form class="login-form" id="step5Form" style="display: none;">
+                <h2>Confirm your project details</h2>
+                <div class="confirmation-summary" id="confirmationSummary"></div>
+                <div class="button-row">
+                    <button type="button" id="step5Back">Back</button>
+                    <button type="button" id="createProjectBtn">Create Project</button>
+                </div>
+            </form>
+            
+            <!-- Cancel link -->
+            <a href="index.html" class="cancel-link">Cancel</a>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Creating Your Project...</div>
+            <div class="loading-subtext">Please wait while we set up your project</div>
+        </div>
+    </div>
+
+    <!-- Error Alert Modal -->
+    <div class="error-alert-modal" id="errorAlertModal">
+        <div class="error-alert-content">
+            <div class="error-alert-icon">
+                <svg fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+            </div>
+            <div class="error-alert-title" id="errorAlertTitle">Project Creation Failed</div>
+            <div class="error-alert-message" id="errorAlertMessage">An error occurred during project creation. Please try again.</div>
+            <button class="error-alert-button" id="errorAlertButton">OK</button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Appwrite client
+        const client = new Appwrite.Client()
+            .setEndpoint('https://fra.cloud.appwrite.io/v1')
+            .setProject('680364d1000477ec420b');
+
+        const account = new Appwrite.Account(client);
+        const databases = new Appwrite.Databases(client);
+        const DATABASE_ID = '6816dc7f00195dd533bf';
+        const COLLECTION_ID = '6816de0600052ed834e4';
+
+        // Color palette for tags
+        const COLOR_PALETTE = {
+            1: 'rgb(46, 213, 115)',    // Green
+            2: 'rgb(52, 152, 219)',    // Blue
+            3: 'rgb(231, 76, 60)',     // Red
+            4: 'rgb(241, 196, 15)',    // Yellow
+            5: 'rgb(155, 89, 182)',    // Purple
+            6: 'rgb(230, 126, 34)',    // Orange
+            7: 'rgb(26, 188, 156)',    // Turquoise
+            8: 'rgb(236, 240, 241)',   // Light Gray
+            9: 'rgb(149, 165, 166)',   // Dark Gray
+            10: 'rgb(243, 156, 18)'    // Gold
+        };
+
+        // Limits
+        const MAX_PROJECTS = 15;
+        const MAX_TAGS = 15;
+
+        // Check user limits
+        async function checkUserLimits() {
+            try {
+                const user = await account.get();
+                
+                // Check project count
+                const userProjects = await databases.listDocuments(
+                    DATABASE_ID,
+                    COLLECTION_ID,
+                    [Appwrite.Query.equal('userId', user.$id)]
+                );
+                
+                const projectCount = userProjects.documents.length;
+                
+                // Check unique tags count
+                const uniqueTags = new Set();
+                userProjects.documents.forEach(project => {
+                    const tagTexts = project.tag_Text ? project.tag_Text.split(',').filter(t => t.trim()) : [];
+                    tagTexts.forEach(tag => uniqueTags.add(tag.trim()));
+                });
+                
+                const tagCount = uniqueTags.size;
+                
+                return {
+                    projectCount,
+                    tagCount,
+                    canCreateProject: projectCount < MAX_PROJECTS,
+                    canAddTags: tagCount < MAX_TAGS
+                };
+            } catch (error) {
+                console.error('Error checking user limits:', error);
+                return {
+                    projectCount: 0,
+                    tagCount: 0,
+                    canCreateProject: true,
+                    canAddTags: true
+                };
+            }
+        }
+
+        // Get existing tags from user's projects
+        async function getExistingTags() {
+            try {
+                const user = await account.get();
+                
+                const userProjects = await databases.listDocuments(
+                    DATABASE_ID,
+                    COLLECTION_ID,
+                    [Appwrite.Query.equal('userId', user.$id)]
+                );
+                
+                const existingTags = new Set();
+                userProjects.documents.forEach(project => {
+                    const tagTexts = project.tag_Text ? project.tag_Text.split(',').filter(t => t.trim()) : [];
+                    tagTexts.forEach(tag => existingTags.add(tag.trim()));
+                });
+                
+                return Array.from(existingTags);
+            } catch (error) {
+                console.error('Error getting existing tags:', error);
+                return [];
+            }
+        }
+
+        // Quotes for random selection
+        const quotes = [
+            {
+                text: "Splendor has streamlined how I share ui/ux mockups with the rest of my team, I would recommend it to anyone looking for a polished, elegant, and secure solution to develop frontend projects.",
+                author: "Sai T. Prakhya"
+            },
+            {
+                text: "Using Splendor has completely changed the way I share and collaborate on UI/UX mockups. It's sleek, reliable, and perfect for any frontend workflow.",
+                author: "Ken Nguyen"
+            },
+            {
+                text: "Splendor makes frontend collaboration effortless. It's a polished, secure, and elegant platform for sharing and refining interface designs with your team.",
+                author: "Aarav Bhatt"
+            },
+            {
+                text: "Splendor is like a smarter, sleeker CodePen—great for quickly sharing interactive mockups and frontend concepts without the usual friction.",
+                author: "Dhruv Patil"
+            },
+            {
+                text: "With Splendor, our design and development teams stay in sync. It's a refined tool that simplifies the way we work on UI ideas together.",
+                author: "Austin Zhong"
+            }
+        ];
+
+        // Form data
+        let formData = {
+            projectName: '',
+            projectDescription: '',
+            visibility: 'private',
+            tags: []
+        };
+
+        let currentStep = 1;
+        let selectedTags = [];
+        let existingTags = [];
+
+        // Check authentication on page load
+        window.addEventListener('load', async function() {
+            try {
+                const currentSession = await account.getSession('current');
+                if (!currentSession) {
+                    window.location.href = 'Login.html';
+                    return;
+                }
+                initializeForm();
+            } catch (error) {
+                window.location.href = 'Login.html';
+            }
+        });
+
+        function initializeForm() {
+            generateNameSuggestions();
+            setupEventListeners();
+            updateCharacterCounts();
+            setRandomQuote();
+        }
+
+        function setRandomQuote() {
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('randomQuote').textContent = randomQuote.text;
+            document.getElementById('quoteAuthor').textContent = randomQuote.author;
+        }
+
+        // Random name generation
+        function getRandomElement(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        function generateProjectNames(count) {
+            const adjectives = [
+                'mango', 'lunar', 'crystal', 'velvet', 'neon', 'azure', 'phantom', 'cosmic', 'silent', 'electric', 
+                'midnight', 'hollow', 'frosted', 'gilded', 'opal', 'sable', 'serene', 'vapor', 'wisp', 'arcane', 
+                'prism', 'ember', 'misty', 'gossamer', 'echo', 'mythic', 'aurora', 'glimmer', 'solstice', 'dusk', 
+                'dawn', 'haze', 'plasma', 'quartz', 'ripple', 'zenith', 'nova', 'mirage'
+            ];
+            const nouns = [
+                'tree', 'echo', 'owl', 'cosmos', 'fern', 'myth', 'dream', 'mist', 'grove', 'spire', 'veil', 'pulse', 
+                'rift', 'shade', 'glyph', 'drift', 'flare', 'shadow', 'whisper', 'dawn', 'dusk', 'zenith', 'nova', 
+                'solstice', 'ember', 'wisp', 'arc', 'gale', 'frost'
+            ];
+            const quirks = [
+                'farce', 'dream', 'myth', 'mist', 'whisper', 'pulse', 'flux', 'haze', 'mirage', 'riddle', 'fable', 
+                'spark', 'shard', 'veil', 'echo', 'dawn', 'dusk', 'zenith', 'nova', 'solstice', 'ember', 'shade', 
+                'glyph', 'drift', 'flare'
+            ];
+            
+            const results = new Set();
+            while (results.size < count) {
+                const name = `${getRandomElement(adjectives)}-${getRandomElement(nouns)}-${getRandomElement(quirks)}`;
+                results.add(name);
+            }
+            return Array.from(results);
+        }
+
+        function generateNameSuggestions() {
+            const suggestionsContainer = document.getElementById('nameSuggestions');
+            const suggestions = generateProjectNames(6);
+            
+            suggestionsContainer.innerHTML = '';
+            suggestions.forEach(name => {
+                const div = document.createElement('div');
+                div.className = 'suggestion-item';
+                div.textContent = name;
+                div.addEventListener('click', () => {
+                    document.querySelectorAll('.suggestion-item').forEach(item => item.classList.remove('selected'));
+                    div.classList.add('selected');
+                    document.getElementById('projectName').value = name;
+                    updateCharacterCounts();
+                });
+                suggestionsContainer.appendChild(div);
+            });
+        }
+
+        function setupEventListeners() {
+            // Project name input
+            document.getElementById('projectName').addEventListener('input', function() {
+                sanitizeInput(this);
+                updateCharacterCounts();
+                clearError('projectName');
+                
+                // Deselect any selected suggestion if user manually types
+                const selectedSuggestion = document.querySelector('.suggestion-item.selected');
+                if (selectedSuggestion) {
+                    const suggestionText = selectedSuggestion.textContent;
+                    const currentValue = this.value;
+                    
+                    // If the current value doesn't match the selected suggestion, deselect it
+                    if (currentValue !== suggestionText) {
+                        selectedSuggestion.classList.remove('selected');
+                    }
+                }
+            });
+
+            // Project description input
+            document.getElementById('projectDescription').addEventListener('input', function() {
+                sanitizeInput(this);
+                updateCharacterCounts();
+                clearError('projectDescription');
+            });
+
+            // Navigation buttons
+            document.getElementById('step1Next').addEventListener('click', () => validateAndNext(1));
+            document.getElementById('step2Back').addEventListener('click', () => goToStep(1));
+            document.getElementById('step2Next').addEventListener('click', () => validateAndNext(2));
+            document.getElementById('step3Back').addEventListener('click', () => goToStep(2));
+            document.getElementById('step3Next').addEventListener('click', () => validateAndNext(3));
+            document.getElementById('step4Back').addEventListener('click', () => goToStep(3));
+            document.getElementById('step4Next').addEventListener('click', () => validateAndNext(4));
+            document.getElementById('step5Back').addEventListener('click', () => goToStep(4));
+            document.getElementById('createProjectBtn').addEventListener('click', createProject);
+
+            // Visibility selection
+            document.querySelectorAll('.visibility-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.visibility-btn').forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    formData.visibility = this.dataset.visibility;
+                    clearError('visibility');
+                });
+            });
+
+            // Tag creation
+            document.getElementById('createTagBtn').addEventListener('click', async (e) => {
+                e.preventDefault();
+                await createNewTag();
+            });
+            document.getElementById('newTagInput').addEventListener('keypress', async function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    await createNewTag();
+                }
+            });
+            
+            // Tag input sanitization
+            document.getElementById('newTagInput').addEventListener('input', function() {
+                sanitizeTagInput(this);
+            });
+
+            // Error alert
+            document.getElementById('errorAlertButton').addEventListener('click', hideErrorAlert);
+        }
+
+        function sanitizeInput(input) {
+            let value = input.value;
+            
+            // Remove HTML tags
+            value = value.replace(/<.*?>/g, '');
+            
+            // Remove dangerous characters
+            value = value.replace(/['";\\]/g, '');
+            
+            // Remove SQL injection patterns
+            value = value.replace(/(--|\/\*|\*\/|#|\b(select|insert|update|delete|drop|union|alter|create|replace|truncate|exec|script)\b)/gi, '');
+            
+            // Remove multiple spaces
+            value = value.replace(/\s{2,}/g, ' ');
+            
+            if (input.value !== value) {
+                input.value = value;
+                showError(input.id, 'Invalid characters removed');
+            }
+        }
+
+        function sanitizeTagInput(input) {
+            const originalValue = input.value;
+            // Only allow alphanumeric characters (A-Z, a-z, 0-9)
+            const sanitizedValue = originalValue.replace(/[^A-Za-z0-9]/g, '');
+            
+            if (originalValue !== sanitizedValue) {
+                input.value = sanitizedValue;
+                showError('tags', 'Only letters (A-Z) and numbers (0-9) are allowed in tags');
+                return false; // Indicates sanitization occurred
+            }
+            return true; // No sanitization needed
+        }
+
+        function updateCharacterCounts() {
+            const nameInput = document.getElementById('projectName');
+            const descInput = document.getElementById('projectDescription');
+            const nameCounter = document.getElementById('nameCharCounter');
+            const descCounter = document.getElementById('descCharCounter');
+
+            const nameLength = nameInput.value.length;
+            const descLength = descInput.value.length;
+
+            nameCounter.textContent = `${nameLength} / 64`;
+            descCounter.textContent = `${descLength} / 99`;
+
+            if (nameLength > 64) {
+                nameCounter.classList.add('over');
+            } else {
+                nameCounter.classList.remove('over');
+            }
+
+            if (descLength > 99) {
+                descCounter.classList.add('over');
+            } else {
+                descCounter.classList.remove('over');
+            }
+        }
+
+        function validateAndNext(step) {
+            let isValid = true;
+
+            switch(step) {
+                case 1:
+                    const name = document.getElementById('projectName').value.trim();
+                    if (!name || name.length < 3) {
+                        showError('projectName', 'Project name must be at least 3 characters');
+                        isValid = false;
+                    } else if (name.length > 64) {
+                        showError('projectName', 'Project name must be 64 characters or fewer');
+                        isValid = false;
+                    } else {
+                        formData.projectName = name;
+                    }
+                    break;
+
+                case 2:
+                    const description = document.getElementById('projectDescription').value.trim();
+                    if (!description || description.length < 1) {
+                        showError('projectDescription', 'Project description is required');
+                        isValid = false;
+                    } else if (description.length > 99) {
+                        showError('projectDescription', 'Project description must be 99 characters or fewer');
+                        isValid = false;
+                    } else {
+                        formData.projectDescription = description;
+                    }
+                    break;
+
+                case 3:
+                    if (!formData.visibility) {
+                        showError('visibility', 'Please select a visibility option');
+                        isValid = false;
+                    }
+                    break;
+
+                case 4:
+                    if (selectedTags.length < 1) {
+                        showError('tags', 'Please select at least 1 tag');
+                        isValid = false;
+                    } else if (selectedTags.length > 10) {
+                        showError('tags', 'You can select up to 10 tags');
+                        isValid = false;
+                    } else {
+                        formData.tags = selectedTags;
+                    }
+                    break;
+            }
+
+            if (isValid) {
+                goToStep(step + 1);
+            }
+        }
+
+        function goToStep(step) {
+            // Fade out current form
+            const currentForm = document.querySelector('.login-form[style*="display: block"]');
+            if (currentForm) {
+                // Start fade out animation
+                currentForm.classList.add('fade-out');
+                
+                setTimeout(() => {
+                    // Hide all forms
+                    document.querySelectorAll('.login-form').forEach(form => {
+                        form.style.display = 'none';
+                        form.classList.remove('fade-out', 'fade-in', 'initial-load');
+                    });
+
+                    // Show target form with initial load state
+                    const targetForm = document.getElementById(`step${step}Form`);
+                    targetForm.style.display = 'block';
+                    targetForm.classList.add('initial-load');
+                    
+                    // Force reflow to ensure the initial state is applied
+                    targetForm.offsetHeight;
+                    
+                    // Start fade in animation
+                    targetForm.classList.remove('initial-load');
+                    targetForm.classList.add('fade-in');
+
+                    // Load data for specific steps
+                    switch(step) {
+                        case 2:
+                            if (!formData.projectDescription) {
+                                const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                                              'July', 'August', 'September', 'October', 'November', 'December'];
+                                const date = new Date();
+                                document.getElementById('projectDescription').value = `This is my ${months[date.getMonth()]} ${date.getFullYear()} project!`;
+                                updateCharacterCounts();
+                            }
+                            break;
+                        case 4:
+                            loadExistingTags();
+                            break;
+                        case 5:
+                            showConfirmation();
+                            break;
+                    }
+
+                    currentStep = step;
+                }, 400); // Increased timing for smoother transition
+            } else {
+                // First time loading, show with fade in
+                document.querySelectorAll('.login-form').forEach(form => {
+                    form.style.display = 'none';
+                    form.classList.remove('fade-out', 'fade-in', 'initial-load');
+                });
+                
+                const targetForm = document.getElementById(`step${step}Form`);
+                targetForm.style.display = 'block';
+                targetForm.classList.add('initial-load');
+                
+                // Force reflow
+                targetForm.offsetHeight;
+                
+                // Start fade in animation
+                targetForm.classList.remove('initial-load');
+                targetForm.classList.add('fade-in');
+
+                // Load data for specific steps
+                switch(step) {
+                    case 2:
+                        if (!formData.projectDescription) {
+                            const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                                          'July', 'August', 'September', 'October', 'November', 'December'];
+                            const date = new Date();
+                            document.getElementById('projectDescription').value = `This is my ${months[date.getMonth()]} ${date.getFullYear()} project!`;
+                            updateCharacterCounts();
+                        }
+                        break;
+                    case 4:
+                        loadExistingTags();
+                        break;
+                    case 5:
+                        showConfirmation();
+                        break;
+                }
+
+                currentStep = step;
+            }
+        }
+
+        async function loadExistingTags() {
+            try {
+                const user = await account.get();
+                const userCards = await databases.listDocuments(DATABASE_ID, COLLECTION_ID, [
+                    Appwrite.Query.equal('userId', user.$id)
+                ]);
+
+                const uniqueTags = new Map();
+                userCards.documents.forEach(card => {
+                    const tagTexts = card.tag_Text ? card.tag_Text.split(',').filter(t => t.trim()) : [];
+                    const tagColors = card.tag_Colors ? card.tag_Colors.split(',').filter(c => c.trim()) : [];
+                    
+                    tagTexts.forEach((text, index) => {
+                        if (!uniqueTags.has(text)) {
+                            let colorChoice = tagColors[index] || '1';
+                            colorChoice = parseInt(colorChoice);
+                            if (isNaN(colorChoice) || colorChoice < 1 || colorChoice > 10) {
+                                colorChoice = 1;
+                            }
+                            uniqueTags.set(text, colorChoice.toString());
+                        }
+                    });
+                });
+
+                existingTags = Array.from(uniqueTags.entries()).map(([text, color]) => ({ text, color }));
+                renderExistingTags();
+            } catch (error) {
+                console.error('Error loading tags:', error);
+                existingTags = [];
+            }
+        }
+
+        function renderExistingTags() {
+            const container = document.getElementById('existingTags');
+            container.innerHTML = '';
+
+            if (existingTags.length === 0) {
+                container.innerHTML = '<p style="color: #666; font-size: 0.9rem;">No existing tags found</p>';
+                return;
+            }
+
+            existingTags.forEach(tag => {
+                const tagDiv = document.createElement('div');
+                tagDiv.className = 'tag-item';
+                tagDiv.textContent = tag.text;
+                
+                const color = COLOR_PALETTE[parseInt(tag.color)];
+                const bgColor = color.replace('rgb', 'rgba').replace(')', ', 0.9)');
+                tagDiv.style.backgroundColor = bgColor;
+                tagDiv.style.color = 'white';
+
+                if (selectedTags.some(t => t.text === tag.text)) {
+                    tagDiv.classList.add('selected');
+                }
+
+                tagDiv.addEventListener('click', () => toggleTag(tag));
+                container.appendChild(tagDiv);
+            });
+        }
+
+        async function createNewTag() {
+            try {
+                const input = document.getElementById('newTagInput');
+                const colorSelect = document.getElementById('tagColorSelect');
+                const createBtn = document.getElementById('createTagBtn');
+                const value = input.value.trim();
+                const colorValue = colorSelect.value;
+
+                // Disable button immediately to prevent spam clicking
+                createBtn.disabled = true;
+                createBtn.textContent = 'Adding...';
+
+                if (!value) {
+                    showError('tags', 'Please enter a tag name');
+                    createBtn.disabled = false;
+                    createBtn.textContent = 'Add';
+                    return;
+                }
+
+                if (value.length > 20) {
+                    showError('tags', 'Tag must be 20 characters or fewer');
+                    createBtn.disabled = false;
+                    createBtn.textContent = 'Add';
+                    return;
+                }
+
+                // Check if the value contains only alphanumeric characters
+                if (!/^[A-Za-z0-9]+$/.test(value)) {
+                    showError('tags', 'Only letters (A-Z) and numbers (0-9) are allowed in tags');
+                    createBtn.disabled = false;
+                    createBtn.textContent = 'Add';
+                    return;
+                }
+
+                // Check if tag is already selected (case-insensitive) - IMMEDIATE CHECK
+                if (selectedTags.some(t => t.text.toLowerCase() === value.toLowerCase())) {
+                    showError('tags', 'Tag already selected');
+                    createBtn.disabled = false;
+                    createBtn.textContent = 'Add';
+                    return;
+                }
+
+                // Check if tag already exists in user's projects (case-insensitive)
+                const limits = await checkUserLimits();
+                const existingTags = await getExistingTags();
+                
+                if (existingTags.some(tag => tag.toLowerCase() === value.toLowerCase())) {
+                    showError('tags', 'This tag already exists in your projects. Please select it from the existing tags instead.');
+                    createBtn.disabled = false;
+                    createBtn.textContent = 'Add';
+                    return;
+                }
+
+                // Check tag limits
+                const currentTagCount = limits.tagCount;
+                const newTagsToAdd = selectedTags.filter(t => t.isNew).length + 1; // +1 for this new tag
+                
+                if (currentTagCount + newTagsToAdd > MAX_TAGS) {
+                    showError('tags', `You can only have up to ${MAX_TAGS} unique tags across all projects. You currently have ${currentTagCount} tags and are trying to add ${newTagsToAdd} new ones.`);
+                    createBtn.disabled = false;
+                    createBtn.textContent = 'Add';
+                    return;
+                }
+
+                const newTag = { text: value, color: colorValue, isNew: true };
+                selectedTags.push(newTag);
+                input.value = '';
+                renderSelectedTags();
+                clearError('tags');
+                
+                // Re-enable button
+                createBtn.disabled = false;
+                createBtn.textContent = 'Add';
+            } catch (error) {
+                console.error('Error creating new tag:', error);
+                showError('tags', 'An error occurred while creating the tag. Please try again.');
+                
+                // Re-enable button on error
+                const createBtn = document.getElementById('createTagBtn');
+                createBtn.disabled = false;
+                createBtn.textContent = 'Add';
+            }
+        }
+
+        async function toggleTag(tag) {
+            try {
+                const index = selectedTags.findIndex(t => t.text === tag.text);
+                
+                if (index === -1) {
+                    if (selectedTags.length >= 10) {
+                        showError('tags', 'You can select up to 10 tags');
+                        return;
+                    }
+                    
+                    // Check if this is a new tag and we're at the limit
+                    if (tag.isNew) {
+                        const limits = await checkUserLimits();
+                        const currentTagCount = limits.tagCount;
+                        const newTagsToAdd = selectedTags.filter(t => t.isNew).length + 1;
+                        
+                        if (currentTagCount + newTagsToAdd > MAX_TAGS) {
+                            showError('tags', `You can only have up to ${MAX_TAGS} unique tags across all projects. You currently have ${currentTagCount} tags and are trying to add ${newTagsToAdd} new ones.`);
+                            return;
+                        }
+                    }
+                    
+                    selectedTags.push(tag);
+                } else {
+                    if (selectedTags.length <= 1) {
+                        showError('tags', 'You must select at least 1 tag');
+                        return;
+                    }
+                    selectedTags.splice(index, 1);
+                }
+
+                renderExistingTags();
+                renderSelectedTags();
+                clearError('tags');
+            } catch (error) {
+                console.error('Error toggling tag:', error);
+                showError('tags', 'An error occurred while selecting the tag. Please try again.');
+            }
+        }
+
+        function renderSelectedTags() {
+            const container = document.getElementById('selectedTags');
+            container.innerHTML = '';
+
+            if (selectedTags.length === 0) {
+                container.innerHTML = '<p style="color: #666; font-size: 0.9rem;">No tags selected</p>';
+                return;
+            }
+
+            selectedTags.forEach(tag => {
+                const tagDiv = document.createElement('div');
+                tagDiv.className = 'selected-tag';
+                
+                const color = COLOR_PALETTE[parseInt(tag.color)];
+                const bgColor = color.replace('rgb', 'rgba').replace(')', ', 0.9)');
+                tagDiv.style.backgroundColor = bgColor;
+                tagDiv.style.color = 'white';
+
+                tagDiv.innerHTML = `
+                    <span>${tag.text}</span>
+                    <button class="remove-tag" onclick="removeTag('${tag.text}')">&times;</button>
+                `;
+                
+                container.appendChild(tagDiv);
+            });
+        }
+
+        function removeTag(tagText) {
+            const index = selectedTags.findIndex(t => t.text === tagText);
+            if (index !== -1) {
+                selectedTags.splice(index, 1);
+                renderExistingTags();
+                renderSelectedTags();
+            }
+        }
+
+        function showConfirmation() {
+            const summary = document.getElementById('confirmationSummary');
+            
+            const tagsHtml = selectedTags.map(tag => {
+                const color = COLOR_PALETTE[parseInt(tag.color)];
+                const bgColor = color.replace('rgb', 'rgba').replace(')', ', 0.9)');
+                // Re-using '.selected-tag' styles but without the remove button
+                return `<div class="selected-tag" style="background-color: ${bgColor}; color: white; padding-right: 12px;"><span>${tag.text}</span></div>`;
+            }).join('');
+
+            summary.innerHTML = `
+                <div class="confirmation-item">
+                    <strong>Project Name:</strong>
+                    <span>${formData.projectName}</span>
+                </div>
+                <div class="confirmation-item">
+                    <strong>Description:</strong>
+                    <span>${formData.projectDescription}</span>
+                </div>
+                <div class="confirmation-item">
+                    <strong>Visibility:</strong>
+                    <span>${formData.visibility.charAt(0).toUpperCase() + formData.visibility.slice(1)}</span>
+                </div>
+                <div class="confirmation-item">
+                    <strong>Tags:</strong>
+                    <div class="confirmation-tags-container">${tagsHtml}</div>
+                </div>
+            `;
+        }
+
+        async function createProject() {
+            showLoadingOverlay();
+
+            try {
+                // Check user limits first
+                const limits = await checkUserLimits();
+                
+                if (!limits.canCreateProject) {
+                    hideLoadingOverlay();
+                    showErrorAlert(
+                        'Project Limit Reached', 
+                        `You have reached the maximum limit of ${MAX_PROJECTS} projects. Please delete some projects before creating new ones.`
+                    );
+                    return;
+                }
+
+                const user = await account.get();
+                
+                const tagTexts = selectedTags.map(t => t.text);
+                const tagColors = selectedTags.map(t => t.color);
+                const tagTextString = tagTexts.join(',');
+                const tagColorsString = tagColors.join(',');
+
+                const cardData = {
+                    title: formData.projectName,
+                    description: formData.projectDescription,
+                    userId: user.$id,
+                    visibility: formData.visibility,
+                    tag_Text: tagTextString,
+                    tag_Colors: tagColorsString,
+                    last_modified: new Date().toISOString(),
+                    createdD: new Date().toISOString()
+                };
+
+                await databases.createDocument(
+                    DATABASE_ID,
+                    COLLECTION_ID,
+                    Appwrite.ID.unique(),
+                    cardData
+                );
+
+                console.log('Project created successfully!');
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error('Error creating project:', error);
+                hideLoadingOverlay();
+                
+                if (error.message && error.message.includes('already exists')) {
+                    showErrorAlert('Project Already Exists', 'A project with this name already exists. Please choose a different name.');
+                } else if (error.code === 429 || error.message.includes('429')) {
+                    showErrorAlert('Rate Limited', 'You have been rate limited due to too many requests. Please wait a few minutes before trying again.');
+                } else {
+                    showErrorAlert('Project Creation Failed', 'An error occurred during project creation. Please check your information and try again.');
+                }
+            }
+        }
+
+        function showError(fieldId, message) {
+            // Handle general errors (show in alert modal)
+            if (fieldId === 'general') {
+                showErrorAlert('Error', message);
+                return;
+            }
+            
+            const errorElement = document.getElementById(fieldId + 'Error');
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.classList.add('show');
+                
+                // Find the closest input group or form section
+                let targetElement = document.getElementById(fieldId);
+                if (!targetElement) {
+                    // For tags, look for the tags container
+                    if (fieldId === 'tags') {
+                        targetElement = document.querySelector('.tags-container');
+                    }
+                }
+                
+                if (targetElement) {
+                    const inputGroup = targetElement.closest('.input-group, .tags-container, .form-group');
+                    if (inputGroup) {
+                        inputGroup.classList.add('error');
+                    }
+                }
+            }
+        }
+
+        function clearError(fieldId) {
+            const errorElement = document.getElementById(fieldId + 'Error');
+            if (errorElement) {
+                errorElement.classList.remove('show');
+                
+                // Find the closest input group or form section
+                let targetElement = document.getElementById(fieldId);
+                if (!targetElement) {
+                    // For tags, look for the tags container
+                    if (fieldId === 'tags') {
+                        targetElement = document.querySelector('.tags-container');
+                    }
+                }
+                
+                if (targetElement) {
+                    const inputGroup = targetElement.closest('.input-group, .tags-container, .form-group');
+                    if (inputGroup) {
+                        inputGroup.classList.remove('error');
+                    }
+                }
+            }
+        }
+
+        function clearAllErrors() {
+            // Clear all error messages
+            const errorElements = document.querySelectorAll('.error-message');
+            errorElements.forEach(element => {
+                element.classList.remove('show');
+            });
+            
+            // Remove error styling from all input groups
+            const errorGroups = document.querySelectorAll('.input-group.error, .tags-container.error, .form-group.error');
+            errorGroups.forEach(group => {
+                group.classList.remove('error');
+            });
+        }
+
+        function showLoadingOverlay() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideLoadingOverlay() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        function showErrorAlert(title, message) {
+            document.getElementById('errorAlertTitle').textContent = title;
+            document.getElementById('errorAlertMessage').textContent = message;
+            document.getElementById('errorAlertModal').style.display = 'flex';
+        }
+
+        function hideErrorAlert() {
+            document.getElementById('errorAlertModal').style.display = 'none';
+        }
+
+        // Add event listener for error alert button
+        document.addEventListener('DOMContentLoaded', function() {
+            const errorAlertButton = document.getElementById('errorAlertButton');
+            if (errorAlertButton) {
+                errorAlertButton.addEventListener('click', hideErrorAlert);
+            }
+        });
+
+        // --- Page Loader Logic ---
+        function setLoaderProgress(percent) {
+            const circle = document.querySelector('.progress-bar');
+            if (!circle) return;
+            const radius = 36;
+            const circumference = 2 * Math.PI * radius;
+            const offset = circumference - (percent / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+        }
+
+        function showLoader() {
+            const loader = document.getElementById('pageLoader');
+            if (loader) loader.classList.remove('hidden');
+            setLoaderProgress(0);
+        }
+
+        function hideLoader() {
+            const loader = document.getElementById('pageLoader');
+            if (loader) {
+                loader.classList.add('hidden');
+                
+                // Trigger line animation
+                const flagship = document.querySelector('.flagship-innovation');
+                if (flagship) {
+                    flagship.classList.add('animate');
+                }
+
+                setTimeout(() => {
+                    if (loader.parentNode) loader.parentNode.removeChild(loader);
+                }, 1300);
+            }
+        }
+
+        function createLoaderGrid() {
+            const grid = document.querySelector('.loader-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            const size = Math.floor(window.innerWidth / 15);
+            const cols = Math.ceil(window.innerWidth / size);
+            const rows = Math.ceil(window.innerHeight / size);
+            grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+            grid.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+            
+            for (let i = 0; i < cols * rows; i++) {
+                const cube = document.createElement('div');
+                cube.className = 'loader-cube';
+                cube.style.width = '100%';
+                cube.style.height = '100%';
+                cube.style.pointerEvents = 'auto';
+                cube.addEventListener('mouseenter', () => {
+                    cube.classList.add('highlight');
+                    if (cube._highlightTimeout) clearTimeout(cube._highlightTimeout);
+                    cube._highlightTimeout = setTimeout(() => {
+                        cube.classList.remove('highlight');
+                    }, 300);
+                });
+                grid.appendChild(cube);
+            }
+        }
+
+        // Initialize loader
+        window.addEventListener('resize', createLoaderGrid);
+        document.addEventListener('DOMContentLoaded', () => {
+            createLoaderGrid();
+            showLoader();
+            
+            // Simulate loading progress
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(progressInterval);
+                    setLoaderProgress(100);
+                    // Animate fill-in effect
+                    setTimeout(() => {
+                        const fill = document.querySelector('.progress-fill');
+                        if (fill) fill.setAttribute('r', 36);
+                        setTimeout(hideLoader, 1200); // Wait for fill, then fade out
+                    }, 200);
+                } else {
+                    setLoaderProgress(progress);
+                }
+            }, 200);
+        });
+        // --- End Page Loader Logic ---
+    </script>
+</body>
+</html> 

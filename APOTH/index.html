@@ -158,37 +158,89 @@
       overflow: hidden;
       cursor: none;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      padding: 2rem;
     }
-    .new-section .scrolling-text-mask {
+    .content-container {
+      display: flex;
+      width: 100%;
+      max-width: 1800px;
+      height: 80vh;
+      gap: 4rem;
+      align-items: center;
+    }
+    .image-area {
+      flex: 1;
+      aspect-ratio: 16/9;
+      background-color: #666;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .project-text-box {
+      flex: 1;
+      padding: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .project-text-box h2 {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 2rem;
+      color: #ffffff;
+      margin: 0 0 1rem 0;
+      font-weight: 300;
+    }
+    .project-text-box p {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.8);
+      margin: 0;
+      line-height: 1.5;
+    }
+    .splendor-button-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+    }
+    .splendor-button {
+      display: inline-block;
+      padding: 1.5rem 4rem;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      color: #ffffff;
+      text-decoration: none;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    }
+    .splendor-button::before {
+      content: '';
       position: absolute;
       top: 0;
-      left: 0;
+      left: -100%;
       width: 100%;
       height: 100%;
-      overflow: hidden;
-      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
-      mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
-      display: flex;
-      align-items: center;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
     }
-    .new-section .scrolling-text {
-      position: absolute;
-      top: 45%;
-      transform: translateY(-50%);
-      font-family: 'Oblata', sans-serif;
-      font-size: 35vh;
-      color: #ffffff;
-      opacity: 0.1;
-      white-space: nowrap;
-      will-change: transform, opacity;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      transform-origin: center;
-      transform: translateY(-50%) scaleY(2.5);
-      letter-spacing: 0.1em;
+    .splendor-button:hover {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+      border-color: rgba(255, 255, 255, 0.6);
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+    .splendor-button:hover::before {
+      left: 100%;
     }
     .full-screen-section {
       width: 100%;
@@ -242,148 +294,7 @@
       90%  { transform: translate(-3%, 3%); }
       100% { transform: translate(2%, -2%); }
     }
-    .glass-container {
-      position: relative;
-      width: 80%;
-      height: 70vh;
-      background: linear-gradient(
-        135deg,
-        rgba(255, 255, 255, 0.1),
-        rgba(255, 255, 255, 0.05)
-      );
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 
-        0 8px 32px 0 rgba(0, 0, 0, 0.2),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1;
-      opacity: 0;
-      transform: translateY(100px) scale(0.95);
-    }
-    .glass-container::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0),
-        rgba(255, 255, 255, 0.3),
-        rgba(255, 255, 255, 0)
-      );
-    }
-    .glass-container::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(
-        135deg,
-        rgba(255, 255, 255, 0.1) 0%,
-        rgba(255, 255, 255, 0) 50%,
-        rgba(255, 255, 255, 0.1) 100%
-      );
-      border-radius: 20px;
-      pointer-events: none;
-    }
-    .glass-animated-text,
-    .glass-animated-text-top {
-      width: 100%;
-      text-align: center;
-      position: absolute;
-      top: 2.5em;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 2;
-      opacity: 0;
-      pointer-events: none;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .glass-quote-mask {
-      width: 100%;
-      max-width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      overflow: visible;
-      height: 4.5vw;
-      min-height: 2.5em;
-      position: relative;
-    }
-    .glass-quote {
-      font-family: 'Bodoni Moda', serif;
-      font-size: 2.5vw;
-      color: #fff;
-      letter-spacing: 0.01em;
-      font-weight: 400;
-      background: none;
-      display: inline-block;
-      white-space: pre-line;
-      position: relative;
-      line-height: 1.3;
-    }
-    .happen-word {
-      position: relative;
-      z-index: 2;
-      font-weight: 700;
-      color: #fff;
-      display: inline-block;
-      opacity: 1 !important;
-      text-shadow: none;
-    }
-    .happen-actual {
-      color: #fff !important;
-      opacity: 1 !important;
-      filter: none !important;
-    }
-    .happen-underline {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: -0.2em;
-      height: 3px;
-      width: 100%;
-      background: #800020;
-      border-radius: 2px;
-      z-index: 2;
-      pointer-events: none;
-      transform: scaleX(0);
-      transform-origin: left center;
-      transition: background 0.2s;
-    }
-    .glass-animated-text.visible,
-    .glass-animated-text-top.visible {
-      opacity: 1;
-      transition: opacity 0.7s cubic-bezier(0.77,0,0.175,1);
-    }
-    .happen-underline.animated {
-      width: 100%;
-      transition: width 0.7s cubic-bezier(0.77,0,0.175,1);
-    }
-    .glass-placeholder-text {
-      margin-top: 6em;
-      color: #fff;
-      font-family: 'Helvetica Neue', sans-serif;
-      font-size: 1.2vw;
-      opacity: 0.8;
-      text-align: center;
-      z-index: 2;
-      position: relative;
-      width: 80%;
-      margin-left: auto;
-      margin-right: auto;
-    }
+
     #apoth-loader {
       position: fixed;
       top: 0;
@@ -436,7 +347,6 @@
       color: transparent;
       background-image: url('ASSETS/HERO.jpg');
       background-size: cover;
-      /* background-position will be set dynamically */
       -webkit-background-clip: text;
       background-clip: text;
       filter: invert(1);
@@ -475,22 +385,22 @@
     </div>
   </div>
   <div class="new-section">
-    <div class="scrolling-text-mask">
-      <div class="scrolling-text">IT'S NOT ABOUT IDEAS, IT'S ABOUT MAKING THEM HAPPEN.</div>
-    </div>
-    <div class="glass-container">
-      <div class="glass-animated-text-top">
-        <div class="glass-quote-mask">
-          <span class="glass-quote">It's not about ideas, it's about making them <span class="happen-word" style="position:relative;display:inline-block;">happen<div class="happen-underline"></div></span><span class="happen-actual">.</span></span>
-        </div>
-        <div class="glass-customer-quote" style="margin-top:3.5em;font-size:1.25vw;color:#ffe7f0;font-family:'Baskervville',serif;text-align:center;opacity:0.92;max-width:80%;margin-left:auto;margin-right:auto;transform:skewX(-12deg);">
-          "I never imagined a product could be this seamless and inspiring, and Apoth's flagship product – Splendor – has truly transformed the way our team works."<br>
-          <span style="font-size:0.95em;opacity:0.7;display:block;margin-top:0.5em;">— Alex R., Satisfied Customer</span>
-        </div>
+    <div class="content-container">
+      <div class="image-area">
+        <img src="ASSETS/demo.png" alt="Demo" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
+      </div>
+      <div class="project-text-box">
+        <h2>Splendor</h2>
+        <p>Coding in the 21st Century</p>
+        <p style="margin-top: 1.5rem; font-size: 1rem; color: rgba(255, 255, 255, 0.8); line-height: 1.6;">An innovative code editor that redefines the development experience with cutting-edge features and seamless workflow integration. Built with modern technologies and designed for the future of programming, Splendor combines powerful functionality with an intuitive interface that adapts to your workflow.</p>
+        <p style="margin-top: 1rem; font-size: 1rem; color: rgba(255, 255, 255, 0.7); line-height: 1.6;">Experience lightning-fast performance, intelligent code completion, and advanced debugging tools that make coding not just efficient, but enjoyable. Whether you're a seasoned developer or just starting your journey, Splendor provides the tools you need to bring your ideas to life.</p>
       </div>
     </div>
   </div>
-  <div class="full-screen-section" id="section-three" style="background-color: #111014;">
+  <div class="full-screen-section" id="section-three" style="background-color: #1a1a1a;">
+    <div class="splendor-button-container">
+      <a href="https://splendor.apoth.dev" class="splendor-button">Go to Splendor</a>
+    </div>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
@@ -515,7 +425,7 @@
         cursor.style.transform = `translate(-50%, -50%) scale(1)`;
       });
     });
-    // All entrance animations are wrapped in a fuction so that I can time them more easily wonce the page is loaded.
+
     function startPageAnimations() {
       const title = document.querySelector('.title');
       if (title) {
@@ -613,7 +523,7 @@
       });
       const textReveal = document.getElementById('textReveal');
       const split = new SplitType(textReveal, { types: 'lines, words' });
-      // Calculate delay so my text paragraph animates in the middle of the side aesthetic text animations.
+
       const edgeRowTotal = edgeRowOrder.length;
       const textRevealDelay = ((edgeRowTotal - 1) * edgeRowStagger) / 2;
       split.lines.forEach((line, index) => {
@@ -646,202 +556,7 @@
           word.style.opacity = opacity;
         });
       });
-      gsap.registerPlugin(ScrollTrigger);
-      const scrollTextElement = document.querySelector('.new-section .scrolling-text');
-      const newSectionElement = document.querySelector('.new-section');
-      if (scrollTextElement && newSectionElement) {
-        let speed = 0.08;
-        let targetSpeed = 0.08;
-        let opacity = 0.08;
-        let targetOpacity = 0.08;
-        let lastScrollY = window.scrollY;
-        let isScrolling = false;
-        let scrollTimeout;
-        let x = 0;
-        const maxSpeed = 2;
-        const maxOpacity = 0.3;
-        const minOpacity = 0.18;
-        const minSpeed = 1;
-        gsap.set(scrollTextElement, { x, opacity });
-        gsap.ticker.add(() => {
-          if (isScrolling) {
-            speed += (targetSpeed - speed) * 0.08;
-          } else {
-            speed = targetSpeed;
-          }
-          x -= speed;
-          if (x < -scrollTextElement.offsetWidth) {
-            x = window.innerWidth;
-          }
-          gsap.set(scrollTextElement, { x });
-        });
-        function onScroll() {
-          const rect = newSectionElement.getBoundingClientRect();
-          const inView = rect.bottom > 0 && rect.top < window.innerHeight;
-          if (!inView) return;
-          targetSpeed = maxSpeed;
-          isScrolling = true;
-          gsap.to(scrollTextElement, { opacity: maxOpacity, duration: 0.3, overwrite: 'auto', ease: 'power1.out' });
-          clearTimeout(scrollTimeout);
-          scrollTimeout = setTimeout(() => {
-            targetSpeed = minSpeed;
-            isScrolling = false;
-            gsap.to(scrollTextElement, { opacity: minOpacity, duration: 0.3, overwrite: 'auto', ease: 'power1.out' });
-          }, 80);
-        }
-        window.addEventListener('scroll', onScroll, { passive: true });
-      }
 
-      gsap.registerPlugin(ScrollTrigger);
-      gsap.to('.glass-container', {
-        scrollTrigger: {
-          trigger: '.new-section',
-          start: 'top 80%',
-          end: 'bottom 20%',
-          toggleActions: 'play reverse play reverse',
-          markers: false
-        },
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        duration: 1.5,
-        ease: 'power2.out'
-      });
-
-      const glassText = document.querySelector('.glass-animated-text-top');
-      const glassQuote = glassText ? glassText.querySelector('.glass-quote') : null;
-      const underline = document.querySelector('.happen-underline');
-      let splitGlass = null;
-      if (glassQuote) {
-        splitGlass = new SplitType(glassQuote, { types: 'words' });
-
-        Array.from(splitGlass.words).forEach(word => {
-          if (word.textContent.replace(/\W/g, '').toLowerCase() === 'happen') {
-            word.classList.add('happen-actual');
-          }
-        });
-
-        const fullStop = Array.from(glassQuote.childNodes).find(node => node.nodeType === 1 && node.classList && node.classList.contains('happen-actual'));
-        if (fullStop) {
-          fullStop.classList.add('happen-actual');
-        }
-      }
-      if (glassText && underline && splitGlass) {
-        let animationPlayed = false;
-        let reversePlayed = false;
-        let playAnimation = () => {
-          if (!animationPlayed) {
-            const tl = gsap.timeline();
-            tl.fromTo(splitGlass.words, {
-              y: '150%',
-              opacity: 0.3,
-              scaleY: 1.2
-            }, {
-              y: '0%',
-              opacity: 0.3,
-              scaleY: 1,
-              duration: 1,
-              ease: 'power4.out',
-              delay: 0.2
-            }, 0)
-            .to(underline, {
-              scaleX: 1,
-              duration: 0.5,
-              ease: 'power4.out'
-            }, 0.5);
-            glassText.classList.add('visible');
-            animationPlayed = true;
-            reversePlayed = false;
-          }
-        };
-        let reverseAnimation = () => {
-          if (!reversePlayed) {
-            const tl = gsap.timeline({onComplete: () => {
-              glassText.classList.remove('visible');
-              animationPlayed = false;
-              reversePlayed = true;
-            }});
-            tl.to(underline, {
-              scaleX: 0,
-              duration: 0.5,
-              ease: 'power4.in'
-            }, 0)
-            .to(splitGlass.words, {
-              y: '150%',
-              scaleY: 1.2,
-              duration: 0.7,
-              ease: 'power4.in'
-            }, 0);
-          }
-        };
-        ScrollTrigger.create({
-          trigger: '.glass-container',
-          start: 'top 90%',
-          onEnter: playAnimation,
-          onLeaveBack: reverseAnimation,
-          onUpdate: self => {
-            if (self.isActive) {
-              playAnimation();
-            } else {
-              reverseAnimation();
-            }
-          }
-        });
-
-        const glassContainer = document.querySelector('.glass-container');
-        if (glassContainer) {
-          let mouse = { x: 0, y: 0, inside: false };
-          let wordStates = splitGlass.words.map(() => ({ opacity: 0.3 }));
-          const minOpacity = 0.3;
-          const maxOpacity = 1.0;
-          const maxDistance = 240;
-          const sigma = maxDistance / 2;
-          const lerp = (a, b, t) => a + (b - a) * t;
-          function updateOpacities() {
-            splitGlass.words.forEach((word, i) => {
-              if (word.classList.contains('happen-actual')) {
-                word.style.opacity = 1;
-                word.style.color = '#fff';
-                word.style.filter = 'none';
-                return;
-              }
-              let targetOpacity = minOpacity;
-              if (mouse.inside) {
-                const wordRect = word.getBoundingClientRect();
-                const wordCenterX = wordRect.left + wordRect.width / 2;
-                const wordCenterY = wordRect.top + wordRect.height / 2;
-                const dx = mouse.x - wordCenterX;
-                const dy = mouse.y - wordCenterY;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                // Gaussian falloff for words highlight etcc.
-                const highlight = Math.exp(-distance * distance / (2 * sigma * sigma));
-                targetOpacity = minOpacity + (maxOpacity - minOpacity) * highlight;
-              }
-z
-              wordStates[i].opacity = lerp(wordStates[i].opacity, targetOpacity, 0.18);
-              word.style.opacity = wordStates[i].opacity;
-            });
-
-            const fullStop = document.querySelector('.glass-quote .happen-actual');
-            if (fullStop) {
-              fullStop.style.opacity = 1;
-              fullStop.style.color = '#fff';
-              fullStop.style.filter = 'none';
-            }
-            requestAnimationFrame(updateOpacities);
-          }
-          glassContainer.addEventListener('mousemove', (e) => {
-            mouse.x = e.clientX;
-            mouse.y = e.clientY;
-            mouse.inside = true;
-          });
-          glassContainer.addEventListener('mouseleave', () => {
-            mouse.inside = false;
-          });
-
-          updateOpacities();
-        }
-      }
     }
     window.addEventListener('load', function() {
       const loader = document.getElementById('apoth-loader');
@@ -936,7 +651,6 @@ z
         animateOpacityProgress(0, 0.7, minTime);
 
         lines.forEach(line => {
-          // I use the text as a mask for the loader's background
           line.style.webkitMaskImage = `text`;
           line.style.maskImage = `text`;
           line.style.webkitMaskRepeat = 'no-repeat';

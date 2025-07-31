@@ -5,7 +5,7 @@ body {
   min-height: 100vh;
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  overflow: hidden !important;
   font-family: 'Inter', sans-serif;
 }
 
@@ -90,6 +90,7 @@ nav li {
   height: calc(100vh - 4rem);
   padding: 1rem;
   gap: 1rem;
+  overflow: hidden !important;
 }
 
 .sidebar {
@@ -116,7 +117,7 @@ nav li {
 }
 
 .sidebar-divider {
-  height: 2px;
+  height: 1px;
   background: linear-gradient(
     to right,
     rgba(255, 255, 255, 0.1),
@@ -124,7 +125,14 @@ nav li {
     rgba(255, 255, 255, 0.1)
   );
   border-radius: 1px;
-  margin: 0 -1rem;
+  margin: 10px 0 10px 0;
+}
+
+body.dark-mode .sidebar-divider,
+body.figma-theme.dark-mode .sidebar-divider {
+  background: none;
+  border-top: 1px solid #23232a;
+  margin: 8px 0 8px 0;
 }
 
 .sidebar-content {
@@ -418,6 +426,71 @@ nav li {
 }
 
 @media (max-width: 768px) {
+    body {
+        overflow: hidden !important;
+    }
+    .dashboard-container {
+        flex-direction: column;
+        height: auto !important;
+        min-height: 100vh;
+        padding: 0.5rem;
+        gap: 0.5rem;
+        overflow: hidden !important;
+    }
+    .main-content {
+        padding: 0;
+        margin-bottom: 0;
+        height: auto !important;
+        min-height: 0 !important;
+        overflow: visible !important;
+    }
+    .cards-container {
+        grid-template-columns: 1fr;
+        padding: 0.5rem;
+        gap: 0.75rem;
+        height: calc(100vh - 3rem);
+        max-height: calc(100vh - 3rem);
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    .cards-container::-webkit-scrollbar {
+        width: 6px;
+        background: transparent;
+    }
+    .cards-container::-webkit-scrollbar-thumb {
+        background: rgba(120,120,120,0.18);
+        border-radius: 6px;
+    }
+    .cards-container::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .mobile-menu-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        bottom: 1rem;
+        right: 1rem;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: #1DE9B6;
+        color: #18181b;
+        border: none;
+        font-size: 1.5em;
+        cursor: pointer;
+        z-index: 101;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        transition: transform 0.2s;
+    }
+    .mobile-menu-button:hover {
+        transform: scale(1.05);
+    }
+    body.dark-mode .mobile-menu-button,
+    body.figma-theme.dark-mode .mobile-menu-button {
+        background: #1DE9B6;
+        color: #18181b;
+    }
     .document-header {
         flex-direction: column;
         gap: 15px;
@@ -431,19 +504,159 @@ nav li {
         width: 100%;
         justify-content: flex-end;
     }
+
+    .create-card-button {
+        position: static !important;
+        width: 100% !important;
+        height: 56px !important;
+        min-height: 56px !important;
+        max-width: 100vw !important;
+        border-radius: 12px !important;
+        margin: 0.5rem 0 0.5rem 0 !important;
+        padding: 0 1rem !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 12px !important;
+        z-index: 102 !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    }
+
+    body.compact-mode .create-card-button {
+        width: 100% !important;
+        height: 56px !important;
+        min-height: 56px !important;
+        border-radius: 12px !important;
+        padding: 0 1rem !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 12px !important;
+    }
+
+    .create-card-button span {
+        font-size: 2em !important;
+        margin: 0 !important;
+    }
+
+    .create-card-button p {
+        display: block !important;
+        font-size: 1em !important;
+        text-align: left !important;
+        margin: 0 !important;
+        color: rgba(255,255,255,0.9);
+    }
+
+    .sidebar-layout-toggle {
+        display: flex !important;
+        margin: 1rem 0 1rem 0;
+    }
+
+    #layoutToggleForm {
+        display: flex !important;
+        max-width: 98vw;
+        padding: 2px;
+    }
 }
 
 
 .cards-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 1.25rem;
   padding: 1rem;
-
-
   overflow-y: auto;
+  overflow-x: hidden;
   flex: 1;
   transition: grid-template-rows 0.3s ease;
+  height: calc(100vh - 3rem);
+  max-height: calc(100vh - 3rem);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.cards-container::-webkit-scrollbar {
+  width: 8px;
+  background: transparent;
+}
+.cards-container::-webkit-scrollbar-thumb {
+  background: rgba(120,120,120,0.18);
+  border-radius: 6px;
+}
+.cards-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@media (max-width: 1200px) {
+  .cards-container {
+    max-width: 100vw;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  }
+}
+
+@media (min-width: 1201px) and (max-width: 1500px) {
+  .cards-container {
+    max-width: 1100px;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  }
+}
+
+@media (min-width: 1501px) and (max-width: 1799px) {
+  .cards-container {
+    max-width: 1400px;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  }
+}
+
+@media (min-width: 1800px) and (max-width: 2199px) {
+  .cards-container {
+    max-width: 1600px;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 2200px) {
+  .cards-container {
+    max-width: 2200px;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.75rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  .create-card-button {
+    min-width: 320px;
+    max-width: 360px;
+  }
+}
+
+@media (min-width: 1201px) and (max-width: 1500px) {
+  .create-card-button {
+    min-width: 340px;
+    max-width: 380px;
+  }
+}
+
+@media (min-width: 1501px) and (max-width: 1799px) {
+  .create-card-button {
+    min-width: 360px;
+    max-width: 400px;
+  }
+}
+
+@media (min-width: 1800px) and (max-width: 2199px) {
+  .create-card-button {
+    min-width: 380px;
+    max-width: 420px;
+  }
+}
+
+@media (min-width: 2200px) {
+  .create-card-button {
+    min-width: 400px;
+    max-width: 440px;
+  }
 }
 
 .card {
@@ -453,7 +666,9 @@ nav li {
   border-radius: 16px;
   padding: 20px;
   margin: 0;
-  width: 360px;
+  width: 100%;
+  min-width: 320px;
+  max-width: 400px;
   height: 360px;
   box-shadow: 
     0 4px 15px rgba(255, 255, 255, 0.1),
@@ -466,6 +681,13 @@ nav li {
   border: 1px solid rgba(255, 255, 255, 0.2);
   opacity: 1;
   transform-origin: center;
+}
+
+body.dark-mode .card,
+body.figma-theme.dark-mode .card {
+  background: rgba(44, 44, 48, 0.82) !important;
+  border: 1px solid rgba(60, 60, 70, 0.22) !important;
+  box-shadow: none !important;
 }
 
 .card.hiding {
@@ -607,6 +829,25 @@ nav li {
   font-size: 0.8em;
 }
 
+.preview-zoom-wrapper {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  overflow: hidden;
+  background: transparent;
+  pointer-events: none;
+}
+
+.card-preview > .preview-zoom-wrapper {
+  pointer-events: auto;
+}
+
 .card-tags {
   display: flex;
   flex-wrap: wrap;
@@ -631,23 +872,82 @@ nav li {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
 }
 
-.card-actions {
-  position: absolute;
-  bottom: 15px;
-  left: 20px;
-  right: 20px;
-  display: flex;
-  gap: 8px;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: all 0.3s ease;
-  pointer-events: none;
+.card-menu-btn {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 1.5em;
+  cursor: pointer;
+  padding: 0 8px;
+  margin-left: 8px;
+  border-radius: 50%;
+  transition: background 0.15s;
+  position: relative;
+  z-index: 2;
 }
-
-.card:hover .card-actions {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: all;
+.card-menu-btn:hover {
+  background: rgba(120,120,120,0.12);
+  color: #222;
+}
+.card-menu-popup {
+  display: none;
+  position: absolute;
+  top: 38px;
+  right: 8px;
+  background: #23232a;
+  color: #ececec;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+  padding: 0 !important;
+  z-index: 1000;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  padding-bottom: 0 !important;
+  line-height: 1 !important;
+  font-size: inherit !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+  flex: 0 0 auto !important;
+  max-width: calc(100vw - 20px);
+  max-height: calc(100vh - 20px);
+}
+.card-menu-popup button {
+  margin-bottom: 0 !important;
+  padding-bottom: 10px !important;
+}
+.card-menu-popup button:last-child {
+  margin-bottom: 0 !important;
+  padding-bottom: 10px !important;
+}
+.card-menu-popup.open {
+  display: flex;
+  min-height: 0 !important;
+  height: auto !important;
+}
+.card-menu-popup button {
+  background: none;
+  border: none;
+  color: inherit;
+  text-align: left;
+  width: 100%;
+  padding: 10px 18px;
+  font-size: 1em;
+  cursor: pointer;
+  border-radius: 0;
+  transition: background 0.15s, color 0.15s;
+}
+.card-menu-popup button:hover {
+  background: #35353f;
+  color: #1DE9B6;
+}
+.card-actions {
+  display: none !important;
 }
 
 .rename-button,
@@ -690,7 +990,9 @@ nav li {
   color: #fff;
   border: 2px dashed rgba(255, 255, 255, 0.3);
   border-radius: 16px;
-  width: 360px;
+  width: 100%;
+  min-width: 320px;
+  max-width: 400px;
   height: 360px;
   cursor: pointer;
   display: flex;
@@ -704,6 +1006,13 @@ nav li {
   box-shadow: 
     0 4px 15px rgba(255, 255, 255, 0.1),
     0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode .create-card-button,
+body.figma-theme.dark-mode .create-card-button {
+  background: rgba(44, 44, 48, 0.48) !important;
+  border: 2px dashed rgba(60, 60, 70, 0.22) !important;
+  box-shadow: none !important;
 }
 
 .create-card-button:hover {
@@ -732,26 +1041,179 @@ nav li {
 @media (max-width: 768px) {
   .dashboard-container {
     flex-direction: column;
+    height: calc(100vh - 3rem);
+    padding: 0.5rem;
+    gap: 0.5rem;
+  }
+  
+  .mobile-menu-button {
+    display: none;
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #1DE9B6;
+    color: #18181b;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    z-index: 101;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transition: transform 0.2s;
+  }
+
+  .mobile-menu-button:hover {
+    transform: scale(1.05);
+  }
+
+  body.dark-mode .mobile-menu-button,
+  body.figma-theme.dark-mode .mobile-menu-button {
+    background: #1DE9B6;
+    color: #18181b;
   }
   
   .sidebar {
     width: 100%;
-    margin-bottom: 1rem;
+    margin: 0;
+    padding: 0.75rem;
+    border-radius: 0;
+    order: 2;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+    height: auto;
+    max-height: 50vh;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .sidebar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .sidebar.visible {
+    transform: translateY(0);
+  }
+
+  body.dark-mode .sidebar,
+  body.figma-theme.dark-mode .sidebar {
+    background: rgba(24, 24, 27, 0.95) !important;
+    border-top: 1px solid #23232a;
   }
   
   .main-content {
     padding: 0;
+    margin-bottom: 0;
   }
 
   .cards-container {
     grid-template-columns: 1fr;
+    padding: 0.5rem;
+    gap: 0.75rem;
+  }
+
+  body.compact-mode .card {
+    height: 100px;
+    padding: 10px;
+    grid-template-rows: auto auto auto;
+  }
+
+  body.compact-mode .card-title {
+    font-size: 0.95em;
+    line-height: 1.2;
+  }
+
+  body.compact-mode .card-meta {
+    font-size: 0.8em;
+  }
+
+  body.compact-mode .card-tags {
+    max-height: 20px;
+  }
+
+  body.compact-mode .tag {
+    font-size: 0.6em;
+    padding: 1px 4px;
+    margin-right: 3px;
   }
 
   .create-card-button {
-    position: fixed;
-    bottom: 1rem;
-    right: 1rem;
-    top: auto;
+    position: static !important;
+    width: 100% !important;
+    height: 56px !important;
+    min-height: 56px !important;
+    max-width: 100vw !important;
+    border-radius: 12px !important;
+    margin: 0.5rem 0 0.5rem 0 !important;
+    padding: 0 1rem !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    z-index: 102 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  }
+
+  body.compact-mode .create-card-button {
+    width: 100% !important;
+    height: 56px !important;
+    min-height: 56px !important;
+    border-radius: 12px !important;
+    padding: 0 1rem !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+  }
+
+  .create-card-button span {
+    font-size: 2em !important;
+    margin: 0 !important;
+  }
+
+  .create-card-button p {
+    display: block !important;
+    font-size: 1em !important;
+    text-align: left !important;
+    margin: 0 !important;
+    color: rgba(255,255,255,0.9);
+  }
+
+  .sidebar-layout-toggle {
+    display: flex !important;
+    margin: 1rem 0 1rem 0;
+  }
+
+  #layoutToggleForm {
+    display: flex !important;
+    max-width: 98vw;
+    padding: 2px;
+  }
+
+  .sidebar-tags-container {
+    max-height: 30vh;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .sidebar-tags-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .sidebar-divider {
+    margin: 0.5rem 0;
   }
 }
 
@@ -801,4 +1263,550 @@ nav li {
 .sidebar-tag.all-tag.active,
 .sidebar-tag.all-tag:hover {
   opacity: 1;
+}
+
+.user-email-reveal-container {
+  position: relative;
+  width: 90%;
+  margin: 32px auto 2px auto;
+  border-radius: 18px;
+  overflow: hidden;
+  min-height: 38px;
+  transition: box-shadow 0.2s;
+}
+.user-email-cover {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(70,70,73,0.5);
+  color: rgba(180,180,190,0.65);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  z-index: 2;
+  transition: opacity 0.25s;
+  padding: 0 18px;
+  box-sizing: border-box;
+}
+.user-email-revealed {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+  padding: 10px 0 6px 0;
+  text-align: center;
+}
+.user-email-reveal-container:hover .user-email-cover {
+  opacity: 0;
+  pointer-events: none;
+}
+.user-email-reveal-container:hover .user-email-revealed {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.card-menu-secondary {
+  display: none;
+  position: absolute;
+  min-width: 260px;
+  background: #23232a;
+  color: #ececec;
+  border-radius: 10px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.22);
+  padding: 18px 18px 18px 18px;
+  z-index: 1001;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+  transition: all 0.18s;
+  max-width: calc(100vw - 20px);
+  max-height: calc(100vh - 20px);
+  overflow: auto;
+}
+.card-menu-secondary input,
+.card-menu-secondary textarea,
+.card-menu-secondary select {
+  background: #18181b;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px;
+  width: 100%;
+  margin-bottom: 8px;
+  font-size: 1em;
+}
+.card-menu-secondary button.card-menu-submit {
+  background: #1DE9B6;
+  color: #18181b;
+  font-weight: 600;
+  padding: 8px 0;
+  border-radius: 6px;
+  border: none;
+  width: 100%;
+  margin-top: 10px;
+  transition: background 0.15s, color 0.15s;
+}
+.card-menu-secondary button.card-menu-submit:hover {
+  background: #13bfa6;
+  color: #fff;
+}
+.card-menu-tag {
+  background: #35353f;
+  color: #ececec;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 0.98em;
+  cursor: pointer;
+  margin-bottom: 4px;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  user-select: none;
+}
+.card-menu-tag.selected {
+  background: #1DE9B6;
+  color: #18181b;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(30,233,182,0.12);
+}
+
+body.dark-mode .strikethrough-grow:hover div,
+body.figma-theme.dark-mode .strikethrough-grow:hover div {
+  transform: none !important;
+}
+body.dark-mode .strikethrough-grow::before,
+body.figma-theme.dark-mode .strikethrough-grow::before {
+  background-color: #000 !important;
+}
+body.dark-mode .strikethrough-grow:hover::before,
+body.figma-theme.dark-mode .strikethrough-grow:hover::before {
+  background-color: #000 !important;
+}
+
+body.compact-mode .cards-container {
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+body.compact-mode .card {
+  width: 100%;
+  height: 120px;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto 1fr auto;
+  gap: 4px;
+}
+
+body.compact-mode .card-header {
+  grid-column: 1;
+  margin-bottom: 0;
+}
+
+body.compact-mode .card-title {
+  font-size: 1em;
+  margin-bottom: 2px;
+}
+
+body.compact-mode .card-meta {
+  grid-column: 1;
+  grid-row: 2;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+body.compact-mode .card-content {
+  display: none;
+}
+
+body.compact-mode .card-preview {
+  display: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+body.compact-mode .card-tags {
+  grid-column: 1;
+  grid-row: 3;
+  margin-bottom: 0;
+  max-height: 24px;
+  overflow: hidden;
+}
+
+body.compact-mode .card-menu-btn {
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0;
+  padding: 4px;
+}
+
+body.compact-mode .create-card-button {
+  width: 100%;
+  height: 120px;
+  padding: 12px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+body.compact-mode .create-card-button span {
+  font-size: 2em;
+  margin-bottom: 0;
+}
+
+body.compact-mode .create-card-button p {
+  font-size: 1em;
+  text-align: left;
+}
+
+body.compact-mode .card {
+  min-height: 120px;
+  max-height: 120px;
+}
+
+body.compact-mode .card-tags {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+body.compact-mode .card-tags::-webkit-scrollbar {
+  display: none;
+}
+
+body.compact-mode .tag {
+  flex-shrink: 0;
+  font-size: 0.65em;
+  padding: 1px 6px;
+  margin-right: 4px;
+}
+
+body.dark-mode.compact-mode .card,
+body.figma-theme.dark-mode.compact-mode .card {
+  background: rgba(44, 44, 48, 0.82) !important;
+  border: 1px solid rgba(60, 60, 70, 0.22) !important;
+}
+
+body.dark-mode.compact-mode .create-card-button,
+body.figma-theme.dark-mode.compact-mode .create-card-button {
+  background: rgba(44, 44, 48, 0.48) !important;
+  border: 2px dashed rgba(60, 60, 70, 0.22) !important;
+}
+
+.sidebar-layout-toggle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem 0 1.5rem 0;
+}
+
+#layoutToggleForm {
+  display: flex;
+  width: 100%;
+  max-width: 280px;
+  margin: 0 auto;
+  background: rgba(36, 38, 44, 0.85);
+  border-radius: 2rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  padding: 4px;
+  gap: 0;
+  border: none;
+  position: relative;
+}
+
+#layoutToggleForm label {
+  flex: 1 1 0;
+  min-width: 0;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 600;
+  color: #bfc3c9;
+  background: none;
+  border-radius: 2rem;
+  text-align: center;
+  padding: 0.5rem 0.5rem;
+  margin: 0;
+  transition: color 0.18s, background 0.18s, box-shadow 0.18s;
+  z-index: 1;
+  user-select: none;
+  position: relative;
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+#layoutToggleForm input[type="radio"] {
+  display: none;
+}
+
+#layoutToggleForm input[type="radio"]:checked + span {
+  background: linear-gradient(90deg, #1DE9B6 60%, #1dc8e9 100%);
+  color: #18181b;
+  box-shadow: 0 2px 8px rgba(30,233,182,0.10);
+  border-radius: 2rem;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+}
+
+#layoutToggleForm span {
+  display: block;
+  border-radius: 2rem;
+  padding: 0.5rem 0.5rem;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: none;
+}
+
+#layoutToggleForm label:not(:last-child) span,
+#layoutToggleForm label:not(:first-child) span {
+  border-radius: 2rem;
+}
+
+#layoutToggleForm label:hover span {
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  border-radius: 2rem;
+}
+
+body.dark-mode #layoutToggleForm,
+body.figma-theme.dark-mode #layoutToggleForm {
+  background: rgba(36, 38, 44, 0.85);
+}
+body.dark-mode #layoutToggleForm label,
+body.figma-theme.dark-mode #layoutToggleForm label {
+  color: #bfc3c9;
+}
+body.dark-mode #layoutToggleForm input[type="radio"]:checked + span,
+body.figma-theme.dark-mode #layoutToggleForm input[type="radio"]:checked + span {
+  background: linear-gradient(90deg, #1DE9B6 60%, #1dc8e9 100%);
+  color: #18181b;
+}
+
+@media (max-width: 768px) {
+  #layoutToggleForm {
+    max-width: 98vw;
+    padding: 2px;
+  }
+  #layoutToggleForm label span {
+    padding: 0.45rem 0.25rem;
+    font-size: 0.97em;
+  }
+}
+
+.page-loader-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100vw; height: 100vh;
+  background: #090a0c;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 1.2s;
+}
+.page-loader-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  position: relative;
+  pointer-events: none;
+}
+.circular-progress {
+  margin-bottom: 24px;
+  display: block;
+}
+.progress-bg {
+  stroke: #222;
+}
+.progress-bar {
+  stroke: #fff;
+  transition: stroke-dashoffset 0.3s linear;
+}
+.progress-fill {
+  transition: r 0.55s cubic-bezier(.4,0,.2,1);
+}
+@keyframes loaderFloat {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+  100% { transform: translateY(0); }
+}
+.loader-text {
+  color: #fff;
+  font-size: 1.18rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  line-height: 2.1;
+  text-align: center;
+  animation: loaderFloat 1.6s ease-in-out infinite;
+  margin-top: 32px;
+}
+.loader-grid {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100vw; height: 100vh;
+  display: grid;
+  z-index: 1;
+}
+.loader-cube {
+  background: rgba(20,20,22,0.12);
+  transition: background 0.18s;
+  pointer-events: auto;
+}
+.loader-cube.highlight, .loader-cube:hover {
+  background: rgba(60,255,180,0.10);
+}
+.page-loader-overlay .loader-content {
+  z-index: 2;
+  position: relative;
+  pointer-events: none;
+}
+.page-loader-overlay, .page-loader-overlay * {
+  user-select: none;
+}
+
+#themeToggleForm {
+  display: flex;
+  width: 100%;
+  max-width: 280px;
+  margin: 0 auto;
+  background: rgba(36, 38, 44, 0.85);
+  border-radius: 2rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  padding: 4px;
+  gap: 0;
+  border: none;
+  position: relative;
+}
+#themeToggleForm label {
+  flex: 1 1 0;
+  min-width: 0;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 600;
+  color: #bfc3c9;
+  background: none;
+  border-radius: 2rem;
+  text-align: center;
+  padding: 0.5rem 0.5rem;
+  margin: 0;
+  transition: color 0.18s, background 0.18s, box-shadow 0.18s;
+  z-index: 1;
+  user-select: none;
+  position: relative;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+#themeToggleForm input[type="radio"] {
+  display: none;
+}
+#themeToggleForm input[type="radio"]:checked + span {
+  background: linear-gradient(90deg, #1DE9B6 60%, #1dc8e9 100%);
+  color: #18181b;
+  box-shadow: 0 2px 8px rgba(30,233,182,0.10);
+  border-radius: 2rem;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+}
+#themeToggleForm span {
+  display: block;
+  border-radius: 2rem;
+  padding: 0.5rem 0.5rem;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: none;
+}
+#themeToggleForm label:not(:last-child) span,
+#themeToggleForm label:not(:first-child) span {
+  border-radius: 2rem;
+}
+#themeToggleForm label:hover span {
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  border-radius: 2rem;
+}
+body.dark-mode #themeToggleForm,
+body.figma-theme.dark-mode #themeToggleForm {
+  background: rgba(36, 38, 44, 0.85);
+}
+body.dark-mode #themeToggleForm label,
+body.figma-theme.dark-mode #themeToggleForm label {
+  color: #bfc3c9;
+}
+body.dark-mode #themeToggleForm input[type="radio"]:checked + span,
+body.figma-theme.dark-mode #themeToggleForm input[type="radio"]:checked + span {
+  background: linear-gradient(90deg, #1DE9B6 60%, #1dc8e9 100%);
+  color: #18181b;
+}
+@media (max-width: 768px) {
+  #themeToggleForm {
+    max-width: 240px;
+  }
+  #themeToggleForm label span {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  width: 100%;
+}
+
+.empty-state-content {
+  text-align: center;
+  max-width: 400px;
+  padding: 40px 20px;
+}
+
+.empty-state-icon {
+  font-size: 64px;
+  margin-bottom: 24px;
+  opacity: 0.7;
+}
+
+.empty-state-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #ececec;
+  margin-bottom: 12px;
+}
+
+.empty-state-description {
+  font-size: 16px;
+  color: #a1a1aa;
+  line-height: 1.5;
+}
+
+body.dark-mode .empty-state-title,
+body.figma-theme .empty-state-title {
+  color: #ececec !important;
+}
+
+body.dark-mode .empty-state-description,
+body.figma-theme .empty-state-description {
+  color: #a1a1aa !important;
 }

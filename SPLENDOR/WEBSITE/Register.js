@@ -24,7 +24,6 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     }
     
     try {
-        // Create user account
         const user = await account.create('unique()', email, password, username);
         console.log('User created:', user);
         
@@ -39,12 +38,19 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         }
         
 
-        await account.updatePrefs({
-            dateOfBirth: dob,
-            gender: gender
-        });
+        let existingPrefs = {};
+        try {
+            existingPrefs = await account.getPrefs();
+        } catch (error) {
+            existingPrefs = {};
+        }
         
-        // Redirect to home pagee
+        const prefs = { ...existingPrefs };
+        prefs.dateOfBirth = dob;
+        prefs.gender = gender;
+        
+        await account.updatePrefs(prefs);
+        
         window.location.href = 'index.html';
     } catch (error) {
         console.error('Registration error:', error);

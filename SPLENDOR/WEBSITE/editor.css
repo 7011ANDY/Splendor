@@ -197,3 +197,54 @@
 .console-message {
     white-space: pre-wrap;
 } 
+
+.ai-info-icon {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 8px;
+    color: #666;
+    cursor: help;
+    position: relative;
+    transition: color 0.2s ease;
+}
+
+.ai-info-icon:hover {
+    color: #007bff;
+}
+
+.ai-info-icon svg {
+    width: 16px;
+    height: 16px;
+}
+
+.ai-info-icon[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 1000;
+    margin-bottom: 5px;
+    max-width: 300px;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.ai-info-icon[title]:hover::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: rgba(0, 0, 0, 0.9);
+    margin-bottom: -5px;
+    z-index: 1000;
+} 

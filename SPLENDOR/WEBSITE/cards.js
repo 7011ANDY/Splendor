@@ -1,9 +1,11 @@
-// Use existing Appwrite client
+
 const databases = new Appwrite.Databases(window.client);
 
-// Database and collection IDs (DO NOT SHAR))
 const DATABASE_ID = '6816dc7f00195dd533bf';
 const COLLECTION_ID = '6816de0600052ed834e4';
+
+const MAX_PROJECTS = 15;
+const MAX_TAGS = 15;
 
 
 const COLOR_PALETTE = {
@@ -37,6 +39,7 @@ async function initializeCards() {
     }
   }
 }
+window.initializeCards = initializeCards;
 
 
 async function loadCards(userId) {
@@ -46,7 +49,7 @@ async function loadCards(userId) {
     const userCards = await databases.listDocuments(DATABASE_ID, COLLECTION_ID, [
       Appwrite.Query.equal('userId', userId)
     ], 100, 0, undefined, undefined, [
-      'title', 'description', 'userId', 'visibility', 'last_modified', 'createdD', 'tag_Text', 'tag_Colors' // Only fetch these fields
+      'title', 'description', 'userId', 'visibility', 'last_modified', 'createdD', 'tag_Text', 'tag_Colors'
     ]);
 
     console.log('User cards:', userCards);
@@ -112,6 +115,7 @@ async function loadCards(userId) {
         tagElement.className = 'sidebar-tag';
         tagElement.textContent = tagText;
         tagElement.style.backgroundColor = bgColor;
+        tagElement.setAttribute('data-color', colorChoice);
         
         
         tagElement.addEventListener('click', () => {
@@ -156,7 +160,6 @@ async function loadCards(userId) {
                 card.classList.remove('showing');
               }, 300);
             } else if (!shouldShow && card.style.display !== 'none') {
-              // Hide card with animation
               card.classList.add('hiding');
               setTimeout(() => {
                 card.style.display = 'none';
@@ -177,52 +180,84 @@ async function loadCards(userId) {
       <span>+</span>
       <p>Create New Project</p>
     `;
-    createButton.addEventListener('click', () => {
-      window.location.href = 'create_project.html';
+    createButton.addEventListener('click', async () => {
+      const limits = await checkUserLimits();
+      
+      if (!limits.canCreateProject) {
+        alert(`You have reached the maximum limit of ${MAX_PROJECTS} projects. Please delete some projects before creating new ones.`);
+        return;
+      }
+      
+      window.location.href = 'final_updated_finished_create-project.html';
     });
     cardsContainer.appendChild(createButton);
 
 
     if (userCards.documents.length === 0) {
-      console.log('No cards found, creating welcome card...');
-      await createWelcomeCard(userId);
+      console.log('No cards found, showing empty state...');
+      const emptyState = document.createElement('div');
+      emptyState.className = 'empty-state';
+      emptyState.innerHTML = `
+        <div class="empty-state-content">
+          <div class="empty-state-icon">🎨</div>
+          <div class="empty-state-title">No projects yet</div>
+          <div class="empty-state-description">Create your first project to get started!</div>
+        </div>
+      `;
+      cardsContainer.appendChild(emptyState);
+      window.dispatchEvent(new Event('cardsLoaded'));
       return;
     }
 
-    // Display user's cards
     userCards.documents.forEach(doc => {
-      createCardElement(doc, true);
+      const card = createCardElement(doc, true);
+      cardsContainer.appendChild(card);
     });
+    window.dispatchEvent(new Event('cardsLoaded'));
   } catch (error) {
     console.error('Error loading cards:', error);
     alert('Error loading cards. Please check your connection and try again.');
+    window.dispatchEvent(new Event('cardsLoaded'));
   }
 }
 
-// Creates a welcome card
-async function createWelcomeCard(userId) {
+async function checkUserLimits() {
   try {
-    console.log('Creating welcome card for user:', userId);
-    const welcomeCard = {
-      title: 'Welcome to Splendor! 🎨',
-      description: 'Create projects with +, add tags, click to open. Set projects public or private.',
-      userId: userId,
-      visibility: 'public',
-      last_modified: new Date().toISOString(),
-      createdD: new Date().toISOString(),
-      tag_Text: ['welcome', 'tutorial', 'help'],
-      tag_Colors: ['2', '3', '5'] 
+    const user = await window.account.get();
+    
+    const userProjects = await databases.listDocuments(
+      DATABASE_ID,
+      COLLECTION_ID,
+      [Appwrite.Query.equal('userId', user.$id)]
+    );
+    
+    const projectCount = userProjects.documents.length;
+    
+    const uniqueTags = new Set();
+    userProjects.documents.forEach(project => {
+      const tagTexts = project.tag_Text ? project.tag_Text.split(',').filter(t => t.trim()) : [];
+      tagTexts.forEach(tag => uniqueTags.add(tag.trim()));
+    });
+    
+    const tagCount = uniqueTags.size;
+    
+    return {
+      projectCount,
+      tagCount,
+      canCreateProject: projectCount < MAX_PROJECTS,
+      canAddTags: tagCount < MAX_TAGS
     };
-
-    await createCard(welcomeCard);
-    console.log('Welcome card created successfully');
-    await loadCards(userId);
   } catch (error) {
-    console.error('Error creating welcome card:', error);
+    console.error('Error checking user limits:', error);
+    return {
+      projectCount: 0,
+      tagCount: 0,
+      canCreateProject: true,
+      canAddTags: true
+    };
   }
 }
 
-// Creating a new card
 async function createCard(cardData) {
   try {
     
@@ -324,31 +359,251 @@ function createCardElement(cardData, isOwner) {
       </div>
     </div>
     <div class="card-content">${escapeHtml(cardData.description)}</div>
-    <div class="card-preview">Preview Coming Soon</div>
+    <div class="card-preview"><div class="preview-loading-text">Preview Loading…</div></div>
     <div class="card-tags">
       ${tagTexts.map((text, index) => {
         const colorChoice = parseInt(tagColors[index]) || 1;
         const color = COLOR_PALETTE[colorChoice];
         const bgColor = color.replace('rgb', 'rgba').replace(')', ', 0.92)');
-        
         return `
-          <span class="tag" style="
-            background-color: ${escapeHtml(bgColor)};
-            color: white;
-          ">
+          <span class="tag" style="background-color: ${escapeHtml(bgColor)}; color: white;">
             ${escapeHtml(text)}
           </span>
         `;
       }).join('')}
     </div>
-    ${isOwner ? `
-    <div class="card-actions">
-      <button class="rename-button" onclick="renameCard('${escapeHtml(cardData.$id)}')">Rename</button>
-      <button class="delete-button" onclick="deleteCard('${escapeHtml(cardData.$id)}')">Delete</button>
+    <button class="card-menu-btn" title="More options">&#8942;</button>
+    <div class="card-menu-popup">
+      <button class="card-menu-rename">Rename</button>
+      <button class="card-menu-delete">Delete</button>
+      <button class="card-menu-visibility">Update Visibility</button>
+      <button class="card-menu-description">Edit Description</button>
+      <button class="card-menu-tags">Edit Tags</button>
     </div>
-    ` : ''}
+    <div class="card-menu-secondary"></div>
   `;
 
+  const menuBtn = card.querySelector('.card-menu-btn');
+  menuBtn.style.position = 'absolute';
+  menuBtn.style.bottom = '18px';
+  menuBtn.style.right = '18px';
+  menuBtn.style.zIndex = '3';
+
+  const menuPopup = card.querySelector('.card-menu-popup');
+  menuPopup.style.position = 'absolute';
+  menuPopup.style.bottom = '48px';
+  menuPopup.style.right = '18px';
+
+  const secondaryMenu = card.querySelector('.card-menu-secondary');
+  secondaryMenu.style.display = 'none';
+  secondaryMenu.style.position = 'absolute';
+  secondaryMenu.style.bottom = '48px';
+  secondaryMenu.style.right = '180px';
+  secondaryMenu.style.minWidth = '260px';
+  secondaryMenu.style.background = '#23232a';
+  secondaryMenu.style.color = '#ececec';
+  secondaryMenu.style.borderRadius = '10px';
+  secondaryMenu.style.boxShadow = '0 6px 24px rgba(0,0,0,0.22)';
+  secondaryMenu.style.padding = '18px 18px 18px 18px';
+  secondaryMenu.style.zIndex = '20';
+  secondaryMenu.style.flexDirection = 'column';
+  secondaryMenu.style.gap = '12px';
+  secondaryMenu.style.alignItems = 'flex-start';
+  secondaryMenu.style.transition = 'all 0.18s';
+
+  let menuOpen = false;
+  menuBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    menuPopup.classList.toggle('open');
+    menuOpen = !menuOpen;
+    
+    if (menuOpen) {
+      setTimeout(() => {
+        const rect = menuPopup.getBoundingClientRect();
+        const cardRect = card.getBoundingClientRect();
+        
+        if (rect.right > window.innerWidth - 10) {
+          menuPopup.style.right = '';
+          menuPopup.style.left = '18px';
+        } else {
+          menuPopup.style.left = '';
+          menuPopup.style.right = '18px';
+        }
+        
+        if (rect.bottom > window.innerHeight - 10) {
+          menuPopup.style.bottom = '';
+          menuPopup.style.top = '48px';
+        } else {
+          menuPopup.style.top = '';
+          menuPopup.style.bottom = '48px';
+        }
+      }, 0);
+      
+      document.addEventListener('click', closeMenu, { once: true });
+    }
+  });
+  function closeMenu(e) {
+    if (!card.contains(e.target)) {
+      menuPopup.classList.remove('open');
+      menuOpen = false;
+      secondaryMenu.style.display = 'none';
+    }
+  }
+
+  function openSecondaryMenu(contentHtml, onSubmit, onOpen) {
+    secondaryMenu.innerHTML = contentHtml;
+    secondaryMenu.style.display = 'flex';
+    menuPopup.classList.remove('open');
+    menuOpen = false;
+    if (onOpen) onOpen(secondaryMenu);
+    const submitBtn = secondaryMenu.querySelector('.card-menu-submit');
+    if (submitBtn) {
+      submitBtn.onclick = (e) => {
+        e.stopPropagation();
+        onSubmit(secondaryMenu);
+      };
+    }
+    setTimeout(() => {
+      const rect = secondaryMenu.getBoundingClientRect();
+      
+      if (rect.right > window.innerWidth - 10) {
+        secondaryMenu.style.right = '';
+        secondaryMenu.style.left = '18px';
+      } else {
+        secondaryMenu.style.left = '';
+        secondaryMenu.style.right = '180px';
+      }
+      
+      if (rect.bottom > window.innerHeight - 10) {
+        secondaryMenu.style.bottom = '';
+        secondaryMenu.style.top = '48px';
+      } else {
+        secondaryMenu.style.top = '';
+        secondaryMenu.style.bottom = '48px';
+      }
+    }, 0);
+    setTimeout(() => {
+      document.addEventListener('click', closeSecondaryMenu, { once: true });
+    }, 0);
+  }
+  function closeSecondaryMenu(e) {
+    if (!card.contains(e.target)) {
+      secondaryMenu.style.display = 'none';
+    }
+  }
+
+  menuPopup.querySelector('.card-menu-rename').onclick = (e) => {
+    e.stopPropagation();
+    openSecondaryMenu(`
+      <div style='margin-bottom:8px;'>Rename Project (max 64 chars)</div>
+      <input class='card-menu-input' type='text' maxlength='64' value="${escapeHtml(cardData.title)}" style='width:100%;padding:8px;border-radius:6px;border:none;background:#18181b;color:#fff;'>
+      <button class='card-menu-submit' style='margin-top:10px;width:100%;background:#1DE9B6;color:#18181b;font-weight:600;padding:8px 0;border-radius:6px;border:none;'>Submit</button>
+    `, (menu) => {
+      const val = menu.querySelector('.card-menu-input').value.trim();
+      if (!val) return alert('Title cannot be empty.');
+      if (val.length > 64) return alert('Title too long.');
+      renameCardWithValue(cardData.$id, val);
+      menu.style.display = 'none';
+    });
+  };
+  menuPopup.querySelector('.card-menu-delete').onclick = (e) => {
+    e.stopPropagation();
+    openSecondaryMenu(`
+      <div style='margin-bottom:8px;'>Are you sure you want to delete this card?</div>
+      <button class='card-menu-submit' style='width:100%;background:#D6421E;color:#fff;font-weight:600;padding:8px 0;border-radius:6px;border:none;'>Delete</button>
+    `, () => {
+      deleteCard(cardData.$id);
+      secondaryMenu.style.display = 'none';
+    });
+  };
+  menuPopup.querySelector('.card-menu-visibility').onclick = (e) => {
+    e.stopPropagation();
+    openSecondaryMenu(`
+      <div style='margin-bottom:8px;'>Update Visibility</div>
+      <select class='card-menu-input' style='width:100%;padding:8px;border-radius:6px;border:none;background:#18181b;color:#fff;'>
+        <option value='public' ${cardData.visibility === 'public' ? 'selected' : ''}>Public</option>
+        <option value='private' ${cardData.visibility === 'private' ? 'selected' : ''}>Private</option>
+        <option value='unlisted' ${cardData.visibility === 'unlisted' ? 'selected' : ''}>Unlisted</option>
+      </select>
+      <button class='card-menu-submit' style='margin-top:10px;width:100%;background:#1DE9B6;color:#18181b;font-weight:600;padding:8px 0;border-radius:6px;border:none;'>Submit</button>
+    `, (menu) => {
+      const val = menu.querySelector('.card-menu-input').value;
+      updateCardVisibilityWithValue(cardData.$id, val);
+      menu.style.display = 'none';
+    });
+  };
+  menuPopup.querySelector('.card-menu-description').onclick = (e) => {
+    e.stopPropagation();
+    openSecondaryMenu(`
+      <div style='margin-bottom:8px;'>Edit Description (max 100 chars)</div>
+      <textarea class='card-menu-input' maxlength='100' style='width:100%;padding:8px;border-radius:6px;border:none;background:#18181b;color:#fff;resize:vertical;'>${escapeHtml(cardData.description)}</textarea>
+      <div class='desc-char-counter' style='font-size:0.95em;color:#1DE9B6;text-align:right;margin-top:2px;'>${cardData.description.length}/100</div>
+      <button class='card-menu-submit' style='margin-top:10px;width:100%;background:#1DE9B6;color:#18181b;font-weight:600;padding:8px 0;border-radius:6px;border:none;'>Submit</button>
+    `, (menu) => {
+      const val = menu.querySelector('.card-menu-input').value.trim();
+      if (!val) return alert('Description cannot be empty.');
+      if (val.length > 100) return alert('Description too long.');
+      updateCardDescriptionWithValue(cardData.$id, val);
+      menu.style.display = 'none';
+    }, (menu) => {
+      const textarea = menu.querySelector('.card-menu-input');
+      const counter = menu.querySelector('.desc-char-counter');
+      textarea.addEventListener('input', () => {
+        counter.textContent = textarea.value.length + '/100';
+        if (textarea.value.length > 100) {
+          counter.style.color = '#D6421E';
+        } else {
+          counter.style.color = '#1DE9B6';
+        }
+      });
+    });
+  };
+  menuPopup.querySelector('.card-menu-tags').onclick = async (e) => {
+    e.stopPropagation();
+    const tagElems = document.querySelectorAll('#userTags .sidebar-tag:not(.all-tag)');
+    const allTags = Array.from(tagElems).map(el => el.textContent.trim());
+    const tagColorMap = {};
+    tagElems.forEach(el => {
+      const style = window.getComputedStyle(el);
+      const colorAttr = el.getAttribute('data-color');
+      tagColorMap[el.textContent.trim()] = colorAttr || '1';
+    });
+    const cardTags = tagTexts.map(t => t.trim());
+    openSecondaryMenu(`
+      <div style='margin-bottom:8px;'>Edit Tags (max 10)</div>
+      <div class='card-menu-tags-list' style='display:flex;flex-wrap:wrap;gap:8px;'></div>
+      <div class='tag-count-warning' style='font-size:0.95em;color:#1DE9B6;text-align:right;margin-top:2px;'>${cardTags.length}/10</div>
+      <button class='card-menu-submit' style='width:100%;background:#1DE9B6;color:#18181b;font-weight:600;padding:8px 0;border-radius:6px;border:none;'>Submit</button>
+    `, (menu) => {
+      const selected = Array.from(menu.querySelectorAll('.card-menu-tag.selected')).map(el => el.textContent.trim());
+      const selectedColors = selected.map(tag => tagColorMap[tag] || '1');
+      if (selected.length > 10) return alert('Maximum 10 tags allowed.');
+      updateCardTagsWithValue(cardData.$id, selected, selectedColors);
+      menu.style.display = 'none';
+    }, (menu) => {
+      const tagList = menu.querySelector('.card-menu-tags-list');
+      const countWarning = menu.querySelector('.tag-count-warning');
+      allTags.forEach(tag => {
+        const tagDiv = document.createElement('div');
+        tagDiv.textContent = tag;
+        tagDiv.className = 'card-menu-tag';
+        if (cardTags.includes(tag)) tagDiv.classList.add('selected');
+        tagDiv.onclick = () => {
+          tagDiv.classList.toggle('selected');
+          const selectedCount = menu.querySelectorAll('.card-menu-tag.selected').length;
+          countWarning.textContent = selectedCount + '/10';
+          if (selectedCount > 10) {
+            tagDiv.classList.remove('selected');
+            countWarning.style.color = '#D6421E';
+            alert('Maximum 10 tags allowed.');
+          } else {
+            countWarning.style.color = '#1DE9B6';
+          }
+        };
+        tagList.appendChild(tagDiv);
+      });
+    });
+  };
 
   const titleElement = card.querySelector('.card-title');
   const updateTitleSize = () => {
@@ -361,16 +616,104 @@ function createCardElement(cardData, isOwner) {
   
 
   card.addEventListener('click', (e) => {
-
+    if (
+      e.target.classList.contains('card-menu-btn') ||
+      e.target.closest('.card-menu-popup') ||
+      e.target.closest('.card-menu-secondary')
+    ) {
+      e.stopPropagation();
+      return;
+    }
     if (e.target.tagName === 'BUTTON') return;
     if (!isOwner) return; 
     window.location.href = `editor.html?projectId=${encodeURIComponent(cardData.$id)}`;
   });
 
-  document.getElementById('cardsContainer').appendChild(card);
+  const previewDiv = card.querySelector('.card-preview');
+  previewDiv.style.display = 'flex';
+  previewDiv.style.alignItems = 'center';
+  previewDiv.style.justifyContent = 'center';
+  previewDiv.style.position = 'relative';
+  previewDiv.style.height = '';
+  let previewLoaded = false;
+  async function loadPreview() {
+    if (previewLoaded) return;
+    previewLoaded = true;
+    const CODE_COLLECTION_ID = '682215d200201cb95f05';
+    try {
+      const codeDoc = await databases.getDocument(DATABASE_ID, CODE_COLLECTION_ID, cardData.$id);
+      const html = codeDoc.html_code || '';
+      const css = codeDoc.css_code || '';
+      const js = codeDoc.js_code || '';
+      const isFullHTML = html.toLowerCase().includes('<!doctype') || html.toLowerCase().includes('<html');
+      const consoleOverrideScript = `
+        <script type=\"text/javascript\">\nif (!window._consoleOverridden) {\nwindow._consoleOverridden = true;\nwindow._originalConsole = {\nlog: console.log,\nerror: console.error,\nwarn: console.warn,\ninfo: console.info\n};\nfunction sendToParent(type, ...args) {\nwindow.parent.postMessage({type: 'console', method: type, args: args.map(arg => {if (typeof arg === 'object') {try {return JSON.stringify(arg);} catch (e) {return String(arg);}}return String(arg);})}, '*');}\nconsole.log = (...args) => {window._originalConsole.log.apply(console, args);sendToParent('log', ...args);};\nconsole.error = (...args) => {window._originalConsole.error.apply(console, args);sendToParent('error', ...args);};\nconsole.warn = (...args) => {window._originalConsole.warn.apply(console, args);sendToParent('warn', ...args);};\nconsole.info = (...args) => {window._originalConsole.info.apply(console, args);sendToParent('info', ...args);};}\nwindow.open = () => {};\n<\/script>\n`;
+      const userScript = `<script type=\"text/javascript\">\ntry {\n${js}\n} catch(e) {console.error('Preview JS Error:', e);}\n<\/script>`;
+      let processedHtml = html;
+      if (!isFullHTML) {
+        processedHtml = processedHtml.replace(
+          /https:\/\/via\.placeholder\.com\/(\d+)x(\d+)/g,
+          (match, width, height) => {
+            const svgContent = `
+              <svg width=\"${width}\" height=\"${height}\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect width=\"100%\" height=\"100%\" fill=\"#ddd\"/>\n<text x=\"50%\" y=\"50%\" font-family=\"Arial\" font-size=\"14\" fill=\"#666\" text-anchor=\"middle\" dy=\".3em\">${width}x${height}</text>\n</svg>\n`;
+            return 'data:image/svg+xml;base64,' + btoa(svgContent);
+          }
+        );
+      }
+      const content = isFullHTML ? processedHtml : `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset=\"utf-8\">
+            <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
+            <style type=\"text/css\">${css}</style>
+          </head>
+          <body>
+            ${processedHtml}
+            ${consoleOverrideScript}
+            ${userScript}
+          </body>
+        </html>
+      `;
+      previewDiv.innerHTML = `<div class=\"preview-zoom-wrapper\" style=\"display:flex;align-items:center;justify-content:center;width:100%;height:100%;position:absolute;top:0;left:0;overflow:hidden;\"><iframe style=\"width:640px;height:400px;border:none;background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.04);transform-origin:top left;\" sandbox=\"allow-scripts\" loading=\"lazy\"></iframe></div>`;
+      const wrapper = previewDiv.querySelector('.preview-zoom-wrapper');
+      const iframe = wrapper.querySelector('iframe');
+      iframe.srcdoc = content;
+      iframe.onload = function() {
+        try {
+          const doc = iframe.contentDocument || iframe.contentWindow.document;
+          setTimeout(() => {
+            const body = doc.body;
+            if (!body) return;
+            const contentWidth = Math.max(body.scrollWidth, 1);
+            const contentHeight = Math.max(body.scrollHeight, 1);
+            const scaleX = wrapper.offsetWidth / contentWidth;
+            const scaleY = wrapper.offsetHeight / contentHeight;
+            const scale = Math.min(scaleX, scaleY, 1);
+            iframe.style.transform = `scale(${scale})`;
+          }, 60);
+        } catch (e) {}
+      };
+    } catch (e) {
+      previewDiv.innerHTML = '<div class="preview-error-text">No Preview Available</div>';
+    }
+  }
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          loadPreview();
+          obs.unobserve(card);
+        }
+      });
+    }, { threshold: 0.2 });
+    observer.observe(card);
+  } else {
+    card.addEventListener('mouseenter', loadPreview, { once: true });
+  }
+  return card;
 }
 
-// Additional input validation for XSS prevention
 function validateInput(input, fieldName) {
   const suspiciousPatterns = [
     { pattern: /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, message: 'contains script tags' },
@@ -408,7 +751,6 @@ async function promptWithValidation(message, defaultValue = '', maxLength = null
     }
 
     try {
-      // Validate for malicious content
       validateInput(trimmedValue, fieldName);
 
 
@@ -472,7 +814,6 @@ async function promptForTags(defaultValue = '') {
     const tagsInput = prompt('Enter tags (comma-separated, max 10 tags) - at least one tag is required:', defaultValue);
     if (tagsInput === null) return null; 
     
-    // Don't allow empty input
     if (!tagsInput.trim()) {
       alert('At least one tag is required. Please try again.');
       continue;
@@ -550,7 +891,6 @@ async function promptForTags(defaultValue = '') {
 
     const tagColors = [];
 
-    // Get colors for valid tags using number selection
     for (const tagText of tagTexts) {
       while (true) { 
         const colorPrompt = 'Choose a color number for tag "' + tagText + '":\n\n' +
@@ -575,7 +915,7 @@ async function promptForTags(defaultValue = '') {
     }
 
     return {
-      tag_Text: tagTexts.map(tag => String(tag).trim()), // Ensure tags are strings
+      tag_Text: tagTexts.map(tag => String(tag).trim()),
       tag_Colors: tagColors  
     };
   }
@@ -615,7 +955,6 @@ function isValidColor(color) {
   return testDiv.style.color !== '';
 }
 
-// Rename card (previously edit)
 async function renameCard(cardId) {
   try {
     const card = await databases.getDocument(DATABASE_ID, COLLECTION_ID, cardId);
@@ -682,4 +1021,71 @@ function createProjectCard(project) {
     });
     
     return card;
+} 
+
+function updateCardVisibility(cardId) {
+  alert('Update visibility for card: ' + cardId);
+}
+function updateCardDescription(cardId) {
+  alert('Edit description for card: ' + cardId);
+}
+function updateCardTags(cardId) {
+  alert('Edit tags for card: ' + cardId);
+}
+
+async function renameCardWithValue(cardId, newTitle) {
+  try {
+    await databases.updateDocument(
+      DATABASE_ID,
+      COLLECTION_ID,
+      cardId,
+      { title: newTitle }
+    );
+    const user = await window.account.get();
+    await loadCards(user.$id);
+  } catch (error) {
+    alert('Failed to rename card.');
+  }
+}
+async function updateCardVisibilityWithValue(cardId, newVisibility) {
+  try {
+    await databases.updateDocument(
+      DATABASE_ID,
+      COLLECTION_ID,
+      cardId,
+      { visibility: newVisibility }
+    );
+    const user = await window.account.get();
+    await loadCards(user.$id);
+  } catch (error) {
+    alert('Failed to update visibility.');
+  }
+}
+async function updateCardDescriptionWithValue(cardId, newDescription) {
+  try {
+    await databases.updateDocument(
+      DATABASE_ID,
+      COLLECTION_ID,
+      cardId,
+      { description: newDescription }
+    );
+    const user = await window.account.get();
+    await loadCards(user.$id);
+  } catch (error) {
+    alert('Failed to update description.');
+  }
+}
+async function updateCardTagsWithValue(cardId, newTags, newColors) {
+  try {
+    const updatedCard = {
+      tag_Text: Array.isArray(newTags) ? newTags.join(',') : '',
+      tag_Colors: Array.isArray(newColors) ? newColors.join(',') : ''
+    };
+    console.log('Updating card with:', updatedCard);
+    await databases.updateDocument(DATABASE_ID, COLLECTION_ID, cardId, updatedCard);
+    const user = await window.account.get();
+    await loadCards(user.$id);
+  } catch (error) {
+    alert('Failed to update tags.');
+  }
 } 

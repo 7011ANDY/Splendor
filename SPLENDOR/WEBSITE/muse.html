@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muse AI - Splendor</title>
+    <link rel="icon" type="image/x-icon" href="Assets/SPLENDOR_ICON.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Baskervville:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="Log_and_Reg_style.css">
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@17.0.0"></script>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Roboto', sans-serif;
+            background: url('Assets/musebackgroundnewonethistimethisone.jpg') no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+            padding-top: 50px;
+        }
+
+        .content-wrapper {
+            opacity: 0;
+            transition: opacity 0.5s ease-in;
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch;
+            padding: 20px;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .content-wrapper.loaded {
+            opacity: 1;
+        }
+
+        .left-section, .right-section {
+            width: min(300px, 25vw);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section-title {
+            font-size: clamp(16px, 2.5vw, 20px);
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .section-content {
+            font-size: clamp(11px, 1.8vw, 13px);
+            line-height: 1.4;
+            color: #555;
+        }
+
+        .step {
+            margin-bottom: 12px;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+        }
+
+        .step-number {
+            font-weight: 700;
+            color: #1DE9B6;
+            margin-right: 5px;
+        }
+
+        .security-note {
+            background: rgba(29, 233, 182, 0.1);
+            border: 1px solid rgba(29, 233, 182, 0.2);
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: clamp(10px, 1.6vw, 12px);
+        }
+
+        .encryption-info {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .encryption-info h4 {
+            font-size: clamp(12px, 2vw, 14px);
+            font-weight: 600;
+            color: #333;
+            margin: 0 0 5px 0;
+        }
+
+        .encryption-info p {
+            margin: 0;
+            font-size: clamp(10px, 1.6vw, 12px);
+        }
+
+        @media (max-width: 1024px) {
+            body {
+                padding-top: 70px;
+            }
+            
+            .content-wrapper {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+                padding: 20px 15px;
+                margin-top: 0;
+                min-height: calc(100vh - 70px);
+            }
+            
+            .left-section, .right-section {
+                width: min(400px, 90vw);
+                height: auto;
+                min-height: fit-content;
+                margin-bottom: 15px;
+            }
+            
+            .muse-container {
+                width: min(400px, 90vw);
+                height: min(600px, 80vh);
+                margin-bottom: 15px;
+            }
+            
+            .nav-bar {
+                height: 50px;
+                padding: 0 15px;
+            }
+            
+            .left-section:first-child {
+                margin-top: 10px;
+            }
+        }
+
+        .page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .page-loader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader-text {
+            color: #fff;
+            font-size: 24px;
+            font-weight: 500;
+            letter-spacing: 2px;
+        }
+
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: #18191a;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 1000;
+            border-bottom: 1px solid #23232a;
+        }
+
+        .nav-bar .back-button {
+            position: static;
+            margin-right: 20px;
+        }
+
+        .nav-bar .page-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: #ececec;
+        }
+
+        .back-button {
+            background: #23232a;
+            color: #ececec;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: #2a2a32;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .muse-container {
+            width: min(400px, 90vw);
+            height: min(600px, 80vh);
+            margin: 0 auto;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .muse-header {
+            text-align: center;
+            margin-bottom: 0;
+            padding: 0;
+        }
+
+        .muse-title {
+            font-family: 'Baskervville', serif;
+            font-size: clamp(20px, 3.5vw, 28px);
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 1vh;
+        }
+
+        .muse-subtitle {
+            font-size: clamp(12px, 2vw, 14px);
+            color: #666;
+            margin-bottom: 2vh;
+        }
+
+        .muse-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            gap: 0;
+        }
+
+        .coming-soon {
+            font-size: clamp(16px, 3vw, 20px);
+            color: #666;
+            text-align: center;
+            margin-top: 4vh;
+        }
+
+        .muse-pfp {
+            width: 100%;
+            height: clamp(40px, 6vh, 80px);
+            object-fit: cover;
+            border-radius: 0;
+            margin: 0;
+            margin-top: 10px;
+            display: block;
+            box-shadow: none;
+        }
+
+        .sigma-ai-text {
+            margin-top: 0;
+            margin-bottom: 0;
+            padding-top: 15px;
+            margin: 0 auto;
+            text-align: center;
+            font-size: clamp(12px, 2vw, 14px);
+            line-height: 1.4;
+            max-width: 90%;
+        }
+
+        .glassmorphic-input {
+            width: 100%;
+            font-size: clamp(12px, 2vw, 14px);
+            padding: clamp(8px, 1.5vh, 12px);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.25);
+            color: #111;
+            background: rgba(255,255,255,0.25);
+            backdrop-filter: blur(8px) saturate(180%);
+            -webkit-backdrop-filter: blur(8px) saturate(180%);
+            box-shadow: 0 4px 24px 0 rgba(31, 38, 135, 0.10);
+            outline: none;
+            margin-bottom: 8px;
+            transition: box-shadow 0.2s, border 0.2s;
+            box-sizing: border-box;
+        }
+        .glassmorphic-input:focus {
+            border: 1.5px solid #b8b9be;
+            box-shadow: 0 2px 8px 0 rgba(31, 38, 135, 0.12);
+        }
+        .glassmorphic-btn {
+            font-size: clamp(12px, 2vw, 14px);
+            padding: clamp(8px, 1.5vh, 12px) clamp(16px, 2.5vw, 20px);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.25);
+            color: #111;
+            border: 1px solid rgba(255,255,255,0.25);
+            backdrop-filter: blur(8px) saturate(180%);
+            -webkit-backdrop-filter: blur(8px) saturate(180%);
+            box-shadow: 0 4px 24px 0 rgba(31, 38, 135, 0.10);
+            cursor: pointer;
+            transition: box-shadow 0.2s, background 0.2s, border 0.2s;
+            white-space: nowrap;
+        }
+        .glassmorphic-btn:hover {
+            background: rgba(255,255,255,0.35);
+            border: 1.5px solid #b8b9be;
+            box-shadow: 0 2px 8px 0 rgba(31, 38, 135, 0.12);
+        }
+        .glassmorphic-input::placeholder {
+            color: #111;
+            opacity: 1;
+        }
+        .glassmorphic-input::-webkit-input-placeholder { color: #111; }
+        .glassmorphic-input:-ms-input-placeholder { color: #111; }
+        .glassmorphic-input::-ms-input-placeholder { color: #111; }
+        .glassmorphic-input::-moz-placeholder { color: #111; opacity:1; }
+        .glassmorphic-input:-moz-placeholder { color: #111; opacity:1; }
+
+        .custom-green-notification {
+            background: linear-gradient(120deg, #2ecc40 80%, #27ae60 100%);
+            color: #fff;
+            padding: clamp(8px, 1.5vh, 12px) clamp(16px, 2.5vw, 20px);
+            margin-top: 8px;
+            border-radius: 12px;
+            font-size: clamp(12px, 2vw, 14px);
+            box-shadow: 0 4px 24px 0 rgba(31,38,135,0.10);
+            opacity: 0;
+            transition: opacity 0.3s;
+            position: relative;
+            min-width: 220px;
+            max-width: 340px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .custom-green-notification .notif-progress {
+            position: absolute;
+            left: 0; bottom: 0;
+            height: 4px;
+            background: #fff;
+            border-radius: 0 0 12px 12px;
+            width: 100%;
+            transition: width 2.9s linear;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <button class="back-button" onclick="window.location.href='index.html'">← Back</button>
+        <div class="page-title">Muse AI</div>
+    </div>
+
+    <div class="page-loader">
+        <div class="loader-text">Loading...</div>
+    </div>
+
+    <div class="content-wrapper">
+        <div class="left-section">
+            <div class="section-title">How to Get Your GPT Key</div>
+            <div class="section-content">
+                <div class="step">
+                    <span class="step-number">1.</span>
+                    Go to <a href="https://platform.openai.com/api-keys" target="_blank" style="color: #1DE9B6;">OpenAI Platform</a>
+                </div>
+                <div class="step">
+                    <span class="step-number">2.</span>
+                    Sign in or create an account
+                </div>
+                <div class="step">
+                    <span class="step-number">3.</span>
+                    Click "Create new secret key"
+                </div>
+                <div class="step">
+                    <span class="step-number">4.</span>
+                    Copy the key (starts with "sk-")
+                </div>
+                <div class="step">
+                    <span class="step-number">5.</span>
+                    Paste it in the form on the right
+                </div>
+                <div class="security-note">
+                    <strong>Note:</strong> Keep your API key secure and never share it publicly.
+                </div>
+            </div>
+        </div>
+
+        <div class="muse-container">
+            <div class="muse-header">
+                <img src="Assets/MUSE_AI_pfp.png" alt="Muse AI" class="muse-pfp">
+            </div>
+            <div class="muse-content">
+                <div class="sigma-ai-text">
+                    MUSE - by APOTH is your smart AI partner that's always ready to help you. Unlike traditional AI systems - Muse is able to handle your entire project from start to finish, seamlessly integrating with your existing projects and workflows.
+                    <br><br><br><br>
+                    All you need to get started, is your GPT - API key, and an idea.
+                </div>
+                <form id="apiKeyForm" style="margin-top:15px; display:flex; flex-direction:column; align-items:center; gap:8px; width:90%;">
+                    <div style="color:#b00; font-size:clamp(10px, 1.8vw, 12px); text-align:center; margin-bottom:8px;">
+                        Your passcode is never stored or sent to our servers. If you lose it, you must re-enter your API key.
+                    </div>
+                    <input type="text" id="gptApiKeyInput" placeholder="GPT API Key (sk-...)" class="glassmorphic-input" required maxlength="200">
+                    <input type="password" id="gptPasscodeInput" placeholder="Secret Passcode" class="glassmorphic-input" required maxlength="32">
+                    <button type="submit" class="glassmorphic-btn">Save API Key Securely</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="right-section">
+            <div class="section-title">Security & Encryption</div>
+            <div class="section-content">
+                <div class="encryption-info">
+                    <h4>AES-256-GCM Encryption</h4>
+                    <p>Your API key is encrypted using military-grade AES-256-GCM encryption before being stored.</p>
+                </div>
+                <div class="encryption-info">
+                    <h4>PBKDF2 Key Derivation</h4>
+                    <p>Your passcode is used to derive a unique encryption key using 100,000 iterations of PBKDF2.</p>
+                </div>
+                <div class="encryption-info">
+                    <h4>Zero-Knowledge Storage</h4>
+                    <p>We never see your actual API key or passcode. Only encrypted data is stored on our servers.</p>
+                </div>
+                <div class="encryption-info">
+                    <h4>Client-Side Encryption</h4>
+                    <p>All encryption happens in your browser before any data is sent to our servers.</p>
+                </div>
+                <div class="security-note">
+                    <strong>Best Practice:</strong> Use a strong, unique passcode (3-12 characters) that you can remember.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification-container" style="position:fixed;bottom:32px;right:32px;z-index:9999;"></div>
+
+    <script>
+        const client = new Appwrite.Client()
+            .setEndpoint('https://fra.cloud.appwrite.io/v1')
+            .setProject('680364d1000477ec420b');
+
+        const account = new Appwrite.Account(client);
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                const currentUser = await account.get();
+                console.log('User is logged in:', currentUser);
+            } catch (error) {
+                console.error('User is not logged in:', error);
+                window.location.href = 'Login.html';
+                return;
+            }
+
+            document.querySelector('.content-wrapper').classList.add('loaded');
+            document.querySelector('.page-loader').classList.add('fade-out');
+        });
+
+        async function getKeyMaterial(password) {
+            let enc = new TextEncoder();
+            return await window.crypto.subtle.importKey(
+                "raw",
+                enc.encode(password),
+                {name: "PBKDF2"},
+                false,
+                ["deriveKey"]
+            );
+        }
+
+        async function deriveKey(password, salt, iterations = 100000, hash = "SHA-256") {
+            const keyMaterial = await getKeyMaterial(password);
+            return await window.crypto.subtle.deriveKey(
+                {
+                    name: "PBKDF2",
+                    salt: salt,
+                    iterations: iterations,
+                    hash: hash
+                },
+                keyMaterial,
+                {name: "AES-GCM", length: 256},
+                true,
+                ["encrypt", "decrypt"]
+            );
+        }
+
+        async function encryptApiKey(apiKey, passcode) {
+            const enc = new TextEncoder();
+            const salt = window.crypto.getRandomValues(new Uint8Array(16));
+            const iv = window.crypto.getRandomValues(new Uint8Array(12));
+            
+            const key = await deriveKey(passcode, salt);
+            
+            const encodedApiKey = enc.encode(apiKey);
+            
+            const ciphertext = await window.crypto.subtle.encrypt(
+                {name: "AES-GCM", iv: iv},
+                key,
+                encodedApiKey
+            );
+            
+            const result = {
+                ciphertext: btoa(String.fromCharCode(...new Uint8Array(ciphertext))),
+                salt: btoa(String.fromCharCode(...salt)),
+                iv: btoa(String.fromCharCode(...iv)),
+                iterations: 100000,
+                hash: "SHA-256"
+            };
+            
+            return result;
+        }
+
+        document.getElementById('apiKeyForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const apiKey = document.getElementById('gptApiKeyInput').value.trim();
+            const passcode = document.getElementById('gptPasscodeInput').value;
+            
+            if (passcode.length < 3 || passcode.length > 12) {
+                showNotification('Passcode must be between 3-12 characters.');
+                return;
+            }
+            
+            if (!apiKey || !passcode) {
+                showNotification('Please fill in all fields.');
+                return;
+            }
+            
+            showNotification('Encrypting and sending to server...');
+            try {
+                const encrypted = await encryptApiKey(apiKey, passcode);
+                
+                const dataToStore = {
+                    encrypted: encrypted.ciphertext,
+                    salt: encrypted.salt,
+                    iv: encrypted.iv,
+                    iterations: encrypted.iterations,
+                    hash: encrypted.hash,
+                    encryption: "AES-GCM"
+                };
+                
+                const user = await account.get();
+                const prefs = user.prefs || {};
+
+                await account.updatePrefs({
+                    ...prefs,
+                    gptApiKeyData: JSON.stringify(dataToStore)
+                });
+                
+                showNotification('API key saved securely!');
+                document.getElementById('apiKeyForm').reset();
+            } catch (err) {
+                showNotification('Error saving API key.');
+                console.error(err);
+            }
+        });
+
+        function showNotification(message) {
+            const container = document.getElementById('notification-container');
+            const notif = document.createElement('div');
+            notif.className = 'custom-green-notification';
+            notif.innerHTML = `<span>${message}</span><div class='notif-progress'></div>`;
+            container.appendChild(notif);
+            setTimeout(() => { notif.style.opacity = '1'; }, 10);
+            const progress = notif.querySelector('.notif-progress');
+            progress.style.width = '100%';
+            setTimeout(() => { progress.style.width = '0%'; }, 30);
+            setTimeout(() => {
+                notif.style.opacity = '0';
+                setTimeout(() => container.removeChild(notif), 400);
+            }, 3000);
+        }
+    </script>
+</body>
+</html> 
